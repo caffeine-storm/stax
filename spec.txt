@@ -1,0 +1,9 @@
+Core: manage a collection of todo items with simple dependencies
+
+
+make-stack:
+
+push-stack:
+
+pop-stack:
+
