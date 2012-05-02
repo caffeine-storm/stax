@@ -11,6 +11,12 @@
 
 I haz {{ all_stax|length }} stax :)
 
+<ul>
+{% for stx in all_stax %}
+    <li>{{ stx }}</li>
+{% endfor %}
+</ul>
+
 {% else %}
 
 <h4> I haz no Stax :( </h4>
