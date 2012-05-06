@@ -1,6 +1,8 @@
+<!DOCTYPE>
 <html>
 
 <head>
+    <link rel="stylesheet" href="/static/stax/styles.css" />
 </head>
 
 <body>
@@ -9,13 +11,11 @@
 
 {% if all_stax %}
 
-I haz {{ all_stax|length }} stax :)
-
-<ul>
-{% for stx in all_stax %}
-    <li>{{ stx }}</li>
+<div>
+{% for node in all_stax %}
+    <span class="staxnode">{{ node }}</span>
 {% endfor %}
-</ul>
+</div>
 
 {% else %}
 
