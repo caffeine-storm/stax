@@ -11,11 +11,13 @@
 
 {% if all_stax %}
 
-<div>
-{% for node in all_stax %}
-    <span class="staxnode">{{ node }}</span>
+<ul class="stack-list">
+{% for stack in all_stax %}
+    <li class="stack-base">
+        <span class="stack-base-text">{{ stack.name }}</span>
+    </li>
 {% endfor %}
-</div>
+</ul>
 
 {% else %}
 
