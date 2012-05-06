@@ -11,15 +11,15 @@
 
 {% if all_stax %}
 
-{% for stack_name, nodes in all_stax.items %}
-<ul class="stack-list">
-{% for node_name in nodes %}
+{% for stack in all_stax %}
+<ul class="stack-list" style="width: {{ stack.width }}ex">
+{% for node in stack.nodes %}
     <li class="stack-node">
-        <span class="stack-node-text">{{ node_name }}</span>
+        <span class="stack-node-text">{{ node }}</span>
     </li>
 {% endfor %}
     <li class="stack-base">
-        <span class="stack-base-text">{{ stack_name }}</span>
+        <span class="stack-base-text">{{ stack.name }}</span>
     </li>
 </ul>
 {% endfor %}

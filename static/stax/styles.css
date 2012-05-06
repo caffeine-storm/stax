@@ -1,11 +1,31 @@
 .stack-list {
     list-style-type: none;
+    font-size: 18pt;
+    text-align: center;
+}
+
+.stack-node, .stack-base {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.stack-node {
+    border: solid 2px black;
+    background-color: #5487FF;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom: hidden;
+}
+
+.stack-base {
+    background-color: #DEDEDE;
+}
+
+.stack-node-text {
+    padding: 2px;
 }
 
 .stack-base-text {
-    background-color: #5487FF;
     padding: 2px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
 }
 

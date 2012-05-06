@@ -3,13 +3,19 @@ from stax.models import Stack
 
 def get_stax():
     allStax = Stack.objects.all()
-    ret = {}
+    ret = []
     for st in allStax:
-        ret[str(st.name)] = []
+        tmp = {}
+        tmp["name"] = str( st.name )
+        tmp["nodes"] = []
         top = st.top
+        maxwidth = len( str( st.name ) )
         while top:
-            ret[str(st.name)].append( str(top.name) )
+            maxwidth = max( maxwidth, len( str( top.name ) ) )
+            tmp["nodes"].append( str( top.name) )
             top = top.parent
+        tmp["width"] = maxwidth
+        ret.append( tmp )
     return ret
 
 def frontpage(req):
