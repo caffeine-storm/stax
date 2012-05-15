@@ -24,7 +24,7 @@ function popStack( stackID ) {
         if( req.readyState == 4 && req.status == 200 ) {
             // The request body is the new HTML to shove into
             // the <ul> tag...
-            target = document.getElementById( "target-stack" );
+            target = document.getElementById( "target-stack-" + stackID.toString() );
             target.innerHTML = req.responseText;
         }
     };
@@ -35,5 +35,10 @@ function popStack( stackID ) {
 }
 
 function pushStack( stackID ) {
-    alert( "Harro!" );
+    // Show the 'new-node-{{id}}' stash
+    // Switch the 'push' button to 'submit'/'save'/whatever
+
+    var newNode = document.getElementById( "new-node-" + stackID.toString() );
+    newNode.style.visibility = "visible";
+    newNode.innerHTML = "LOL I AM SOME HTML. OKAY?";
 }

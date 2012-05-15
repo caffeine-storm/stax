@@ -1,6 +1,8 @@
     <li class="push-pop-controls">
         <button onclick="popStack({{ stack.id }})">pop</button>
+        <button onclick="pushStack({{ stack.id }})">push</button>
     </li>
+    <li id="new-node-{{stack.id}}" class="stack-node" style="visibility: hidden" />
 {% for node in stack.nodes %}
     <li class="stack-node">
         <span class="stack-node-text">{{ node }}</span>
