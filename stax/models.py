@@ -15,3 +15,11 @@ class Stack( models.Model ):
     def __unicode__(self):
         return self.name
 
+    def doPop(self):
+        if not self.top:
+            return None
+        ret = self.top
+        self.top = ret.parent
+        ret.parent = None
+        return ret
+

@@ -1,8 +1,11 @@
-<!DOCTYPE>
+<!doctype html>
 <html>
 
 <head>
-    <link rel="stylesheet" href="/static/stax/styles.css" />
+    <meta charset="utf-8"/>
+    <title>Stax</title>
+    <link rel="stylesheet" href="/static/stax/styles.css"/>
+    <script type="text/javascript" src="/static/stax/script.js"></script>
 </head>
 
 <body>
@@ -12,7 +15,12 @@
 {% if all_stax %}
 
 {% for stack in all_stax %}
+
 <ul class="stack-list" style="width: {{ stack.width }}ex">
+    <li class="push-pop-controls">
+        <!-- TODO: csrf token plz and ty -->
+        <button onclick="popStack({{ stack.id }})">pop</button>
+    </li>
 {% for node in stack.nodes %}
     <li class="stack-node">
         <span class="stack-node-text">{{ node }}</span>

@@ -1,10 +1,11 @@
 from django.conf.urls import patterns, include, url
-
 from django.contrib import admin
+from stax.api import doPop
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^stax/$', 'stax.views.frontpage'),
+    url(r'^stax/api/pop$', doPop),
     url(r'^admin/', include(admin.site.urls)),
 )
 

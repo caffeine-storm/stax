@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from django.views.decorators.csrf import ensure_csrf_cookie
 from stax.models import Stack
 
 def get_stax():
@@ -7,6 +8,7 @@ def get_stax():
     for st in allStax:
         tmp = {}
         tmp["name"] = str( st.name )
+        tmp["id"] = st.id
         tmp["nodes"] = []
         top = st.top
         maxwidth = len( str( st.name ) )
@@ -18,6 +20,7 @@ def get_stax():
         ret.append( tmp )
     return ret
 
+@ensure_csrf_cookie
 def frontpage(req):
     return render_to_response(
         'stax/index.html',
