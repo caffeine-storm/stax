@@ -14,21 +14,12 @@
 
 {% if all_stax %}
 
-{% for stack in all_stax %}
+{% for s in all_stax %}
 
-<ul class="stack-list" id="target-stack" style="width: {{ stack.width }}ex">
-    <li class="push-pop-controls">
-        <!-- TODO: csrf token plz and ty -->
-        <button onclick="popStack({{ stack.id }})">pop</button>
-    </li>
-{% for node in stack.nodes %}
-    <li class="stack-node">
-        <span class="stack-node-text">{{ node }}</span>
-    </li>
-{% endfor %}
-    <li class="stack-base">
-        <span class="stack-base-text">{{ stack.name }}</span>
-    </li>
+<ul class="stack-list" id="target-stack-{{ s.id }}" style="width: {{ s.width }}ex">
+
+{% include "stax/stack_widget.html" with stack=s only %}
+
 </ul>
 {% endfor %}
 
