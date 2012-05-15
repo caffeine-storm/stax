@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponse, Http404
 from stax.models import Stack
+from stax.views import stackToMap
 
 def doPop( req ):
     if not req.method == "POST":
@@ -10,6 +11,12 @@ def doPop( req ):
     oldTop = st.doPop()
     if oldTop is not None:
         oldTop.delete() 
-    st.save()
-    return HttpResponse()
+        st.save()
+
+    return render_to_response(
+        'stax/stack_widget.html',
+        {
+            "stack" : stackToMap( st ),
+        }
+    )
 

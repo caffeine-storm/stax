@@ -2,23 +2,26 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from stax.models import Stack
 
-def get_stax():
-    allStax = Stack.objects.all()
-    ret = []
-    for st in allStax:
-        tmp = {}
-        tmp["name"] = str( st.name )
-        tmp["id"] = st.id
-        tmp["nodes"] = []
-        top = st.top
-        maxwidth = len( str( st.name ) )
-        while top:
-            maxwidth = max( maxwidth, len( str( top.name ) ) )
-            tmp["nodes"].append( str( top.name) )
-            top = top.parent
-        tmp["width"] = maxwidth
-        ret.append( tmp )
+def stackToMap( st ):
+    ret = {}
+
+    ret["name"] = str( st.name )
+    ret["id"] = st.id
+    ret["nodes"] = []
+
+    maxwidth = len( str( st.name ) )
+
+    top = st.top
+    while top:
+        maxwidth = max( maxwidth, len( str( top.name ) ) )
+        ret["nodes"].append( str( top.name) )
+        top = top.parent
+
+    ret["width"] = maxwidth
     return ret
+
+def get_stax():
+    return [ stackToMap( s ) for s in Stack.objects.all() ]
 
 @ensure_csrf_cookie
 def frontpage(req):

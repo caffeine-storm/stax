@@ -16,7 +16,7 @@
 
 {% for stack in all_stax %}
 
-<ul class="stack-list" style="width: {{ stack.width }}ex">
+<ul class="stack-list" id="target-stack" style="width: {{ stack.width }}ex">
     <li class="push-pop-controls">
         <!-- TODO: csrf token plz and ty -->
         <button onclick="popStack({{ stack.id }})">pop</button>

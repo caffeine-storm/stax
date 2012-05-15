@@ -1,0 +1,12 @@
+    <li class="push-pop-controls">
+        <button onclick="popStack({{ stack.id }})">pop</button>
+    </li>
+{% for node in stack.nodes %}
+    <li class="stack-node">
+        <span class="stack-node-text">{{ node }}</span>
+    </li>
+{% endfor %}
+    <li class="stack-base">
+        <span class="stack-base-text">{{ stack.name }}</span>
+    </li>
+
