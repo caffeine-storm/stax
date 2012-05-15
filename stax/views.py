@@ -17,7 +17,7 @@ def stackToMap( st ):
         ret["nodes"].append( str( top.name) )
         top = top.parent
 
-    ret["width"] = maxwidth
+    ret["width"] = max( maxwidth, 20 )
     return ret
 
 def get_stax():
