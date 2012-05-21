@@ -38,6 +38,7 @@ function popStack( stackID ) {
 function saveNode( stackID ) {
     // Get the new text
     var newEntry = document.getElementById( "new-text-value-" + stackID ).value;
+    if( newEntry.replace( /^\s*/, "" ).replace( /\s*$/, "" ) == "" ) return; // Leave the DOM alone; they misclicked
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
