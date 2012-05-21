@@ -85,6 +85,9 @@ function pushStack( stackID ) {
     newNode.style.visibility = "visible";
     newNode.appendChild( inputField );
 
+    // Select the text field we just added
+    inputField.focus();
+
     // Switch the 'push' button to 'submit'/'save'/whatever
     var pushButton = document.getElementById( "push-button-" + stackID );
     pushButton.innerHTML = "submit";
