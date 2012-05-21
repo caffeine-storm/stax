@@ -92,6 +92,53 @@ function pushStack( stackID ) {
     var pushButton = document.getElementById( "push-button-" + stackID );
     pushButton.innerHTML = "submit";
     pushButton.setAttribute( "onclick", "saveNode( " + stackID + " )" );
-
-    // TODO: select the input field so ppl can just start typing...
 }
+
+function doDeSelect( itemID, oldVal ) {
+    var e = document.getElementById( itemID );
+    var d = e.parentNode;
+    var textVal = e.value;
+
+    var f = document.createElement( "span" );
+    f.setAttribute( "class", "stack-node-text" );
+    f.setAttribute( "onclick", "doSelect('" + itemID + "')" );
+    f.textContent = textVal;
+
+    d.replaceChild( f, e );
+    f.id = e.id;
+
+    // Send AJAX update for node value
+    if( textVal != oldVal ) {
+        var parts = itemID.split( "-" );
+        var nodeOffset = parts.pop();
+        var stackID = parts.pop();
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            if( req.readyState == 4 && req.status == 200 ) {
+                // TODO: signal update
+            } else {
+                // TODO: signal failure
+            }
+        };
+        req.open( "POST", "/stax/api/rename", true );
+        req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        req.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        req.send( "stackid=" + stackID + "&nodeoffset=" + nodeOffset + "&data=" + textVal );
+    }
+}
+
+function doSelect( itemID ) {
+    var e = document.getElementById( itemID );
+    var d = e.parentNode;
+    var textVal = e.textContent;
+
+    var f = document.createElement( "input" );
+    f.setAttribute( "type", "textfield" );
+    f.setAttribute( "onblur", "doDeSelect('" + itemID + "','" + textVal + "')" );
+    f.value = textVal;
+
+    d.replaceChild( f, e );
+    f.id = e.id;
+    f.focus();
+}
+

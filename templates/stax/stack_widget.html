@@ -5,7 +5,7 @@
     <li id="new-node-{{stack.id}}" class="stack-node" style="visibility: hidden" />
 {% for node in stack.nodes %}
     <li class="stack-node">
-        <span class="stack-node-text">{{ node }}</span>
+        <span id="stack-node-{{stack.id}}-{{forloop.counter}}" class="stack-node-text" onclick="doSelect('stack-node-{{stack.id}}-{{forloop.counter}}')">{{ node }}</span>
     </li>
 {% endfor %}
     <li class="stack-base">
