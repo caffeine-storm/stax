@@ -78,7 +78,7 @@ function doDeSelect( itemID, oldVal ) {
     f.id = e.id;
 
     // Send AJAX update for node value
-    if( textVal != oldVal ) {
+    if( textVal != decodeURI( oldVal ) ) {
         var parts = itemID.split( "-" );
         var nodeOffset = parts.pop();
         var stackID = parts.pop();
@@ -94,7 +94,7 @@ function doSelect( itemID ) {
 
     var f = document.createElement( "input" );
     f.setAttribute( "type", "textfield" );
-    f.setAttribute( "onblur", "doDeSelect('" + itemID + "','" + textVal + "')" );
+    f.setAttribute( "onblur", "doDeSelect('" + itemID + "','" + encodeURI( textVal ) + "')" );
     f.value = textVal;
 
     d.replaceChild( f, e );
