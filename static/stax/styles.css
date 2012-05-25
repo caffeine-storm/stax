@@ -27,3 +27,14 @@
 .stack-base-text {
 }
 
+.add-stack-controls {
+	background-color: #C4C4C4;
+	position: fixed;
+	z-index: 42
+}
+
+.stack-display {
+	position: relative;
+	top: 30px;
+}
+
