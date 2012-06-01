@@ -30,7 +30,9 @@
 .add-stack-controls {
 	background-color: #C4C4C4;
 	position: fixed;
-	z-index: 42
+	top: 0px;
+	left: 0px;
+	z-index: 42;
 }
 
 .stack-display {
