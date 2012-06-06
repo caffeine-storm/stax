@@ -137,7 +137,7 @@ function commitNewStack() {
             sd.appendChild( newstack );
         }
 
-        make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':stackid, 'class':'stack-list', 'style':stackwidth }, fnn );
+        make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':'target-stack-'+stackid, 'class':'stack-list', 'style':stackwidth }, fnn );
     }
 
     et.phoneHome( "commitnewstack", {'data':targName}, fn );
