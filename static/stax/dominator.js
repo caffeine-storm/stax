@@ -102,3 +102,57 @@ function doSelect( itemID ) {
     f.focus();
 }
 
+function make_widget( name, ctx, elem, attrs, cb ) {
+    var ret = document.createElement( elem );
+    for( var attr in attrs ) {
+        if( attrs.hasOwnProperty( attr ) ) {
+            ret.setAttribute( attr, attrs[attr] );
+        }
+    }
+
+    et.serverRender( name, ctx, ret, cb );
+}
+
+function commitNewStack() {
+    var targ = document.getElementById( "newstack" );
+    var targName = targ.getElementsByTagName( "input" )[0].value;
+
+    var fn = function( req ) {
+        var xmlDoc = req.responseXML;
+
+        var x = xmlDoc.getElementsByTagName( "stack" )[0];
+        var stackid = x.getElementsByTagName( "stackid" )[0].textContent;
+        var stackwidth = 'width: ';
+        stackwidth += x.getElementsByTagName( "stackwidth" )[0].textContent;
+        stackwidth += 'ex;';
+
+        if( stackid == null || stackwidth == null ) {
+            alert( "couldn't parse xml doc!" );
+            return;
+        }
+
+        var fnn = function( newstack ) {
+            var sd = targ.parentNode;
+            sd.removeChild( targ );
+            sd.appendChild( newstack );
+        }
+
+        make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':stackid, 'class':'stack-list', 'style':stackwidth }, fnn );
+    }
+
+    et.phoneHome( "commitnewstack", {'data':targName}, fn );
+}
+
+function doCreateStack() {
+    var container = document.getElementById( "stack-display" );
+
+    var fn = function( newstack ) {
+        var fc = container.firstChild;
+        container.insertBefore( newstack, fc );
+        var inp = newstack.getElementsByTagName( 'input' )[0];
+        inp.setAttribute( 'onblur', 'commitNewStack()' );
+        inp.focus();
+    };
+
+	make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
+}

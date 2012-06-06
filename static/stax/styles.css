@@ -27,7 +27,7 @@
 .stack-base-text {
 }
 
-.add-stack-controls {
+.add-stack-toolbar {
 	background-color: #C4C4C4;
 	position: fixed;
 	top: 0px;
@@ -35,7 +35,7 @@
 	z-index: 42;
 }
 
-.stack-display {
+#stack-display {
 	position: relative;
 	top: 30px;
 }

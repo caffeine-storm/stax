@@ -13,18 +13,18 @@
 
 <body>
 
-<div class="add-stack-controls">
-	<button>Create Stack</button>
+<div class="add-stack-toolbar">
+{% include "stax/widgets/addstacktoolbar.html" %}
 </div>
 
-<div class="stack-display">
+<div id="stack-display">
 {% if all_stax %}
 
 {% for s in all_stax %}
 
 <ul class="stack-list" id="target-stack-{{ s.id }}" style="width: {{ s.width }}ex">
 
-{% include "stax/stack_widget.html" with stack=s only %}
+{% include "stax/widgets/stack.html" with stack=s only %}
 
 </ul>
 {% endfor %}
