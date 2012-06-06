@@ -70,3 +70,9 @@ def doCommitNewStack( req ):
         mimetype = "text/xml"
     )
 
+def dropStack( req ):
+    theid = req.POST['stackid']
+    s = get_object_or_404( Stack, pk=theid )
+    s.delete()
+    return HttpResponse()
+

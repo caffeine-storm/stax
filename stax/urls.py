@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from stax.api import doPop, doPush, doRename, doCommitNewStack
+from stax.api import doPop, doPush, doRename, doCommitNewStack, dropStack
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^stax/api/push$', doPush),
     url(r'^stax/api/rename$', doRename),
 	url(r'^stax/api/commitnewstack$', doCommitNewStack),
+	url(r'^stax/api/dropstack$', dropStack),
     url(r'^admin/', include(admin.site.urls)),
 )
 

@@ -9,6 +9,9 @@
     </li>
 {% endfor %}
     <li class="stack-base">
-        <span class="stack-base-text">{{ stack.name }}</span>
+        <span class="stack-base-text">
+            {{ stack.name }}
+            {% include "stax/widgets/dropstack.html" with stackid=stack.id only %}
+        </span>
     </li>
 

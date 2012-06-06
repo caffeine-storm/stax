@@ -156,3 +156,14 @@ function doCreateStack() {
 
 	make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
 }
+
+function dropStack( stackid ) {
+    var targ = document.getElementById( "target-stack-" + stackid );
+    var pare = targ.parentNode;
+
+    var fn = function( req ) {
+        pare.removeChild( targ );
+    }
+
+    et.phoneHome( "dropstack", {'stackid': stackid}, fn );
+}
