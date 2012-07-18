@@ -22,7 +22,7 @@ class StackNode( models.Model ):
         return self.name
 
 class Dependency( models.Model ):
-    parent = models.ForeignKey( StackNode, primary_key=True, db_index=True, related_name='parent' )
+    parent = models.ForeignKey( StackNode, db_index=True, related_name='parent' )
     child = models.ForeignKey( StackNode, db_index=True, related_name='child' )
 
     def __unicode__(self):
