@@ -23,10 +23,10 @@ def dump_stack():
     do_dump( 'stack.data', str_stack, stacks )
 
 def dump_stacknode():
-    stacknodes = StackNodes.objects.all()
+    stacknodes = StackNode.objects.all()
     do_dump( 'stacknode.data', str_stacknode, stacknodes )
 
 if __name__ == '__main__':
-    dump_stack()
     dump_stacknode()
+    dump_stack()
 

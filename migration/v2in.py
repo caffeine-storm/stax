@@ -45,14 +45,17 @@ def read_deps_from_nodes():
             yield x
 
 def read_deps_from_stacks():
-    for l open( 'stack.data' ):
+    for l in open( 'stack.data' ):
         x = depFromStack( l )
         if x:
             yield x
 
-if __name__ == '__main__':
+def main():
     map( StackNode.save, read_stacknodes() )
-    map( Stack.save, read_stacks() )
-    map( Dependency.save, read_deps_from_nodes )
-    map( Dependency.save, read_deps_from_stacks )
+    map( StackNode.save, read_stacks() )
+    map( Dependency.save, read_deps_from_nodes() )
+    map( Dependency.save, read_deps_from_stacks() )
+
+if __name__ == '__main__':
+    main()
 
