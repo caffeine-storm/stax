@@ -1,6 +1,11 @@
 
 <li class="{{stack.class}}" width="{{ stack.width }}">
-    <span class="stack-node-text">
+    <span class="{{stack.class}}-text">
         {{ stack.name }}
     </span>
+
+{% if stack.class == "stack-base" %}
+{% include "stax/widgets/dropstack.html" with stackid=stack.id %}
+{% endif %}
+
 </li>

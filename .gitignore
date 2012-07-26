@@ -2,3 +2,4 @@
 db.sqlite3
 templates/polls
 polls
+db_backup
