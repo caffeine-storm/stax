@@ -10,6 +10,7 @@
 }
 
 .stack-node {
+    padding: 5px;
     border: solid 2px black;
     background-color: #5487FF;
     border-top-left-radius: 12px;

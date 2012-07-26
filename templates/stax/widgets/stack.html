@@ -2,10 +2,15 @@
         <button onclick="popStack({{ stack.id }})" id="pop-button-{{stack.id}}">pop</button>
         <button onclick="pushStack({{ stack.id }})" id="push-button-{{stack.id}}">push</button>
     </li>
-    <li id="new-node-{{stack.id}}" class="stack-node" style="visibility: hidden" />
-{% for node in stack.nodes %}
-    <li class="stack-node">
-        <span id="stack-node-{{stack.id}}-{{forloop.counter}}" class="stack-node-text" onclick="doSelect('stack-node-{{stack.id}}-{{forloop.counter}}')">{{ node }}</span>
+    <li id="new-node-{{stack.id}}" class="stack-node" style="visibility: hidden"></li>
+    {{stack.rendered|safe}}
+
+
+
+<!--
+{% for child in stack.children %}
+<li class="stack-node" width="{{ child.width }}">
+        <span id="stack-node-{{stack.id}}-{{forloop.counter}}" class="stack-node-text" onclick="doSelect('stack-node-{{stack.id}}-{{forloop.counter}}')">{{ child.name }}</span>
     </li>
 {% endfor %}
     <li class="stack-base">
@@ -14,4 +19,5 @@
             {% include "stax/widgets/dropstack.html" with stackid=stack.id only %}
         </span>
     </li>
+-->
 

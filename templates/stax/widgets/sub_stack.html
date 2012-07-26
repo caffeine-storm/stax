@@ -1,0 +1,15 @@
+
+<div>
+{% for child in stack.children %}
+    <!-- include "stax/widgets/sub_stack.html" with stack=child only -->
+    <li class="stack-node" width="{{ child.width }}">
+        <span id="stack-node-{{stack.id}}-{{forloop.counter}}" class="stack-node-text" onclick="doSelect('stack-node-{{stack.id}}-{{forloop.counter}}')">{{ child.name }}</span>
+    </li>
+{% endfor %}
+    <li class="stack-node" width="{{ stack.width }}">
+        <span class="stack-node-text">
+            {{ stack.name }}
+            {% include "stax/widgets/dropstack.html" with stackid=stack.id only %}
+        </span>
+    </li>
+</div>

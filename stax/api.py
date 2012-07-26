@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponse, Http404
-from stax.models import Stack, StackNode
+from stax.models import StackNode
 from stax.views import stackToMap
 
 def doPop( req ):
