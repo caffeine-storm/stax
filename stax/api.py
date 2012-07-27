@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404
-from stax.models import StackNode, Dependency
+from stax.models import StackNode, Dependency, NodeType
 from stax.views import stackToMap
 
 class IsParent( Exception ):
@@ -23,5 +23,5 @@ def doPush( parentId, entryVal ):
     newNode = StackNode( name=entryVal, desc="", tp=NodeType(1) )
     newNode.save()
 
-    Dependency( parent=oldnode, child=newnode ).save()
+    Dependency( parent=oldnode, child=newNode ).save()
 
