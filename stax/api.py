@@ -1,78 +1,27 @@
 from django.shortcuts import get_object_or_404, render_to_response
-from django.http import HttpResponse, Http404
-from stax.models import StackNode
+from django.http import HttpResponse, HttpResponseNotAllowed, Http404
+from stax.models import StackNode, Dependency
 from stax.views import stackToMap
 
-def doPop( req ):
-    if not req.method == "POST":
-        raise Http404
-    stackID = req.POST["id"]
-    st = get_object_or_404( Stack, pk=stackID )
-    oldTop = st.doPop()
-    if oldTop is not None:
-        oldTop.delete() 
-        st.save()
+class IsParent( Exception ):
+    def __init__( self ):
+        super( Exception, self).__init__( "Can only pop nodes without children" ) 
 
-    return render_to_response(
-        'stax/widgets/stack.html',
-        {
-            "stack" : stackToMap( st ),
-        }
-    )
+def doPop( nodeId ):
+    # Can only 'pop' top elements
+    if Dependency.objects.filter( parent=nodeId ).count() > 0:
+        raise IsParent()
 
-def doPush( req ):
-    if not req.method == "POST":
-        raise Http404()
-    stackID = req.POST["id"]
-    entryVal = req.POST["item"]
+    stk = get_object_or_404( StackNode, pk=nodeId )
+    deps = Dependency.objects.filter( child=stk )
+    map( Dependency.delete, deps )
+    stk.delete()
 
-    st = get_object_or_404( Stack, pk=stackID )
-    oldTop = st.top
+def doPush( parentId, entryVal ):
+    oldnode = get_object_or_404( StackNode, pk=parentId )
 
-    newNode = StackNode( name=entryVal, desc="" )
-    newNode.parent = oldTop
+    newNode = StackNode( name=entryVal, desc="", tp=NodeType(1) )
     newNode.save()
 
-    st.top = newNode
-    st.save()
-
-    return HttpResponse()
-
-def doRename( req ):
-    if not req.method == "POST":
-        raise Http404()
-
-    stackID = req.POST["stackid"]
-    nodeOffset = int( req.POST["nodeoffset"] )
-    newName = req.POST["data"]
-
-    st = get_object_or_404( Stack, pk=stackID );
-    t = st.top;
-    while nodeOffset > 1:
-        nodeOffset -= 1
-        t = t.parent;
-
-    t.name = newName
-    t.save()
-
-    return HttpResponse()
-
-def doCommitNewStack( req ):
-    ctx = req.POST.dict()
-    s = Stack( name = ctx['data'] )
-    s.save()
-
-    return render_to_response(
-        'stax/widgets/stack.xml',
-        {
-            'stack' : stackToMap( s ),
-        },
-        mimetype = "text/xml"
-    )
-
-def dropStack( req ):
-    theid = req.POST['stackid']
-    s = get_object_or_404( Stack, pk=theid )
-    s.delete()
-    return HttpResponse()
+    Dependency( parent=oldnode, child=newnode ).save()
 

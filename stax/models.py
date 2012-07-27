@@ -11,7 +11,7 @@ class NodeType( models.Model ):
     desc = models.SmallIntegerField( choices=NODE_TYPE_CHOICES, primary_key=True, default=1 )
 
     def __unicode__(self):
-        return NODE_TYPE_CHOICES[self.desc][1]
+        return self.NODE_TYPE_CHOICES[self.desc][1]
 
 class StackNode( models.Model ):
     name = models.CharField(max_length=256)
