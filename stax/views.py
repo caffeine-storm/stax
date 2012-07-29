@@ -38,7 +38,6 @@ def get_stax():
     return map( stackBaseToMap, bases )
 
 def render_stack( req, stk ):
-    from django.template import Template
     from django.template.loader import render_to_string
     payload = "lol :D"
 

@@ -36,17 +36,9 @@ def doPush( req ):
 @restrictMethod( "POST" )
 def doRename( req ):
     stackID = req.POST["stackid"]
-    nodeOffset = int( req.POST["nodeoffset"] )
     newName = req.POST["data"]
 
-    st = get_object_or_404( Stack, pk=stackID );
-    t = st.top;
-    while nodeOffset > 1:
-        nodeOffset -= 1
-        t = t.parent;
-
-    t.name = newName
-    t.save()
+    api.doRename( stackID, newName )
 
     return HttpResponse()
 

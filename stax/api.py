@@ -25,3 +25,8 @@ def doPush( parentId, entryVal ):
 
     Dependency( parent=oldnode, child=newNode ).save()
 
+def doRename( stackId, newName ):
+    st = get_object_or_404( StackNode, pk=stackId );
+    st.name = newName
+    st.save()
+
