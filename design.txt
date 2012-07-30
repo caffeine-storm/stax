@@ -65,6 +65,15 @@ immediately. Once a leaf has been finished, it is removed from the tree (or mayb
 archived to remember where it came from or how much time was spent on it) and the set
 of leaves to work now includes the task's direct parent if it has no other children.
 
+Since there are multiple, independent bases from which tasks are generated, there is
+a forest of trees. Adding to this, the ability to specify cross-tree dependencies, can
+better reify the requirements of a given task. (Ie. a feature belongs to the collection
+of work spent on implementing a tree T but another tree S has a task that requires that
+feature to be implemented.) These relations won't be considered part of the core data
+model, rather, an ancillary module that leverages the core. Any module that decides to
+display this data must realize that it can cause dependency relations to form a general
+graph as opposed to the usual tree.
+
 =============================
 
 Control Flow:
