@@ -27,6 +27,46 @@ Web Server
 
 =============================
 
+Core Data Model:
+----------------
+
+The point of this whole thing is to store, manipulate and maintain the invariants
+of what we'll call the Core Data Model.
+
+The Core Data Model is the information that is central to solving the problem of
+organizing, prioritizing and encoding the pre-conditions of tasks that need doing.
+
+The problem of 'what to work on next' can be solved by
+    - Having top-level task generators (ie. make an app work)
+    - Breaking the task generator into pieces that need to be accomplished in order
+        to consider the task generator 'complete'
+    - Recognizing that these pieces are themselves task generators that can be
+        split into their requirements, repeat ad nauseum.
+    - Bonus Point: sometimes, a task can only be complete once an external, uncontrolled
+        task has been completed (nescessarily by someone else). Call this a 'blocker'
+    - Bonus Point: some tasks naturally end up as requirements of multiple task generators.
+        This is analagous to the idea of a task-generator having a reference to a task
+        that other task generators also have a reference to.
+    - Bonus Pount: some tasks are more important than others. Although the 'needs task
+        X finished first' requirement limits the possible choices of what to work on,
+        it is not strict enough (or descriptive enough) to prioritize which task will
+        be tackled next amongst a list of tasks with no dependents.
+        - The prioritization will almost ceratinly be some heuristic that
+            - Weights more import task-stacks ahead of others
+            - Prevents 'the most important' stack from nescessarily being completed
+                before any work is done on the other stacks
+            - Can be displayed and manipulate very easily
+            - Can be ignored if the user so wishes
+         --> Stack of stacks with more entries for more important stacks...
+
+The data model for solving the core problem is a tree; task generators are the parent
+nodes of their constituent tasks and leaves are the tasks that can be worked on
+immediately. Once a leaf has been finished, it is removed from the tree (or maybe
+archived to remember where it came from or how much time was spent on it) and the set
+of leaves to work now includes the task's direct parent if it has no other children.
+
+=============================
+
 Control Flow:
 ------------------
 
