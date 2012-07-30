@@ -1,0 +1,101 @@
+Backend Data Store
+    - The data that the app maintains, manipulates and presents
+    Impl: RDBMS
+    Exposes: SQL interface
+
+Backend Access:
+    - Communicates with BDS to notify changes
+    Impl: Django Models
+    Exposes: Python API
+
+Authenticated Access:
+    - Wraps Backend Access with user authentication/authorization
+    Impl: Python Code
+    Exposes: Python API
+
+Web API:
+    - Wraps Authenticate access with HTTP get/post requests
+    Impl: Django URLConf + Python Code
+    Exposes: Web API that speaks JSON
+
+Web Server
+    - Talks to web browsers to display/provide access to app
+    Leverages: Web API
+    Impl: Django URLConf + Django templates + Python Code
+    Exposes: HTML Documents and JS for interaction
+
+
+=============================
+
+Control Flow:
+------------------
+
+User auth >> User Page >> ( JS events )* >> logout
+
+User auth:
+    > Browser makes request for front page
+    > Web Server returns login page
+    > Login filled out by browser, submitted to webserver
+    > web server queries auth layer
+        >> success -> User Page
+        >> failture -> error message/try again
+
+User Page:
+    > Web server returns a page displaying the user's stacks
+        with js to do manipulation of app state
+
+JS Events:
+    one of
+        - Stack Control
+            - create stack
+            - drop stack
+            - edit stack ( name, description )
+        - Node Control
+            - push node
+            - pop node
+            - edit node ( name, description )
+            - add node dependency
+            - drop node dependency
+
+    event-handler:
+        > try { prep; execute; update-display; } catch { show-error }
+
+Prep: Determine what action was requested and prepare for it
+    > Web API calls to sanity check requested action
+        >> success -> DOM manip for 'workin on it' >> Excute
+        >> failure -> DOM manip for error message
+
+Execute: Push the action requested to the server
+    > Web API calls to execute
+        >> success -> DOM manip for 'OK!' >> update-display
+        >> failure -> DOM manip for error message
+
+Update-Display: Depending on the action, the state of the app may have changed
+    > Web API calls to get updated info
+    > DOM manip to show new info
+
+Logout:
+    > Browser makes logout request for authenticated user
+    > Web server tells auth to wipe tokens for user
+    > Web server replies with logout-page
+
+
+============================================
+
+Since Django Templates are so good at doing JSON -> HTML, the webserver
+will be doing the translation. So, JS events that manipulate the dom
+will call the webserver to find out the HTML snippets to be shoveling around.
+
+Abstraction: Widgets
+--------------------
+    The web server will provide a 'render' service
+        > HTTP GET with parameters of URL
+            >> URL ::= stax/view/widget_name.html?foo=bar&baz=fez
+        > Return the the rendering of the template from the URL, under
+            the context of the GET parameter dict
+    To cut down on copying of JSON, the web server will be a Web API
+        provider; the JS will call the web server when it needs to render
+        AND when it just needs some JSON to understand what to do next
+        > GET from 'stax/view/{% widget_name %}.html?p1=v1&p2=v2'
+        > GET/POST to 'stax/api/{% func_name %} with GET/POST args
+
