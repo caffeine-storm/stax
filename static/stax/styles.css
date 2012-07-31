@@ -44,6 +44,11 @@
 }
 
 .drop-stack-controls {
+	visibility: hidden;
     float: right;
+}
+
+.stack-base:hover div {
+	visibility: visible;
 }
 
