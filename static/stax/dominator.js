@@ -90,3 +90,50 @@ function dropStack( stackid ) {
     et.phoneHome( "dropstack", {'stackid': stackid}, fn );
 }
 
+function findParentWithClass( className, elem ) {
+	var itr = elem;
+
+	while( true ) {
+		itr = itr.parentNode;
+
+		if( itr == null || itr == document ) {
+			throw new Error("Couldn't find elem with class '" + className + "'" );
+		}
+
+		if( itr.getAttribute( "class" ) == className ) {
+			return itr;
+		}
+	}
+}
+
+function popNode( divElem ) {
+	var stackid = divElem.getAttribute( "stacknodeid" );
+	var curLayer = findParentWithClass( "stack-layer", divElem );
+	var parentLayer = curLayer.parentNode;
+
+	if( parentLayer.getAttribute( "class" ) != "stack-layer" ) {
+		alert( "Error: expecting stack-layer as parent!!!" );
+		return function(x){};
+	}
+
+	return function( evt ) {
+		var fn = function( req ) {
+			parentLayer.removeChild( curLayer );
+		};
+
+		et.phoneHome( "pop", {'stackid': stackid}, fn );
+	};
+}
+
+
+function onLoad() {
+	// Every div with class 'drop-node-controls' needs onClick to invoke popNode
+	var divs = document.getElementsByClassName( "drop-node-controls" );
+	for( var i = 0; i < divs.length; ++i ) {
+		var div = divs.item( i );
+		div.addEventListener( "click", popNode( div ), false );
+	}
+}
+
+document.addEventListener( "DOMContentLoaded", onLoad, false );
+

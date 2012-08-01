@@ -6,6 +6,8 @@
 
 {% if stack.class == "stack-base" %}
 {% include "stax/widgets/dropstack.html" with stackid=stack.id %}
+{% else %}
+{% include "stax/widgets/dropnode.html" with stackid=stack.id %}
 {% endif %}
 
 </li>

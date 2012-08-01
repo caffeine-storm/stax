@@ -27,7 +27,7 @@ var et = {
             callback( req );
         }
 
-        req.open( "POST", "/stax/api/" + api, true );
+        req.open( "POST", "/stax/ajax/" + api, true );
         req.setRequestHeader( "ContentType", "application/x-www-form-urlencoded" );
         req.setRequestHeader( "X-CSRFToken", util.getCookie('csrftoken') );
         req.send( etprivate.encode_args( args ) );

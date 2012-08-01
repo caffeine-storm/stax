@@ -12,7 +12,7 @@ def restrictMethod(m):
 
 @restrictMethod( "POST" )
 def doPop( req ):
-    stackID = req.POST["id"]
+    stackID = req.POST["stackid"]
 
     try:
         api.doPop( stackID )

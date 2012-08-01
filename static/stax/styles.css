@@ -43,12 +43,12 @@
 	top: 30px;
 }
 
-.drop-stack-controls {
+.drop-stack-controls, .drop-node-controls {
 	visibility: hidden;
     float: right;
 }
 
-.stack-base:hover div {
+.stack-base:hover .drop-stack-controls, .stack-node:hover .drop-node-controls {
 	visibility: visible;
 }
 
