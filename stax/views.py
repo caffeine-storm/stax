@@ -10,6 +10,7 @@ def stackToMap( st ):
     ret["name"] = str( st.name )
     ret["id"] = st.id
     ret["desc"] = st.desc
+    ret["class"] = "stack-node"
     ret["children"] = []
 
     tmp = Dependency.objects.filter( parent=st )
@@ -17,12 +18,16 @@ def stackToMap( st ):
     thiswidth = max( 20, len( str( st.name ) ) )
     childwidth = 0
 
-    for dep in tmp:
-        ret["children"].append( stackToMap( dep.child ) )
-        childwidth += ret["children"][-1]["width"]
+
+    if len( tmp ) == 0: # There were no children
+        ret["class"] = "stack-leaf"
+    else:
+        for dep in tmp:
+            ret["children"].append( stackToMap( dep.child ) )
+            childwidth += ret["children"][-1]["width"]
 
     ret["width"] = max( childwidth, thiswidth )
-    ret["class"] = "stack-node"
+
     return ret
 
 def stackBaseToMap( st ):

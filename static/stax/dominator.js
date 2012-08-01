@@ -128,7 +128,7 @@ function popNode( divElem ) {
 
 function onLoad() {
 	// Every div with class 'drop-node-controls' needs onClick to invoke popNode
-	var divs = document.getElementsByClassName( "drop-node-controls" );
+	var divs = document.getElementsByClassName( "drop-leaf-controls" );
 	for( var i = 0; i < divs.length; ++i ) {
 		var div = divs.item( i );
 		div.addEventListener( "click", popNode( div ), false );
