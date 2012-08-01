@@ -46,6 +46,7 @@
 .drop-stack-controls, .drop-node-controls {
 	visibility: hidden;
     float: right;
+	cursor: pointer;
 }
 
 .stack-base:hover .drop-stack-controls, .stack-node:hover .drop-node-controls {
