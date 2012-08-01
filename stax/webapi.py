@@ -16,7 +16,18 @@ def doPop( req ):
 
     try:
         api.doPop( stackID )
-    except api.IsParent as e:
+    except api.StaxAPIException as e:
+        return HttpResponse( str( e ), status=409 )
+
+    return HttpResponse()
+
+@restrictMethod( "POST" )
+def dropStack( req ):
+    theid = req.POST['stackid']
+
+    try:
+        api.dropStack( theid )
+    except api.StaxAPIException as e:
         return HttpResponse( str( e ), status=409 )
 
     return HttpResponse()
@@ -55,11 +66,4 @@ def doCommitNewStack( req ):
         },
         mimetype = "text/xml"
     )
-
-@restrictMethod( "POST" )
-def dropStack( req ):
-    theid = req.POST['stackid']
-    s = get_object_or_404( Stack, pk=theid )
-    s.delete()
-    return HttpResponse()
 
