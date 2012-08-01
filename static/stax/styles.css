@@ -47,14 +47,22 @@
 	top: 30px;
 }
 
-.drop-stack-controls, .drop-leaf-controls {
+.stack-controls, .leaf-controls {
 	visibility: hidden;
-    float: right;
-	cursor: pointer;
 	display: inline;
+	float: right;
+	cursor: pointer;
 }
 
-.stack-base:hover .drop-stack-controls, .stack-leaf:hover .drop-leaf-controls {
+.stack-controls:hover, .leaf-controls:hover {
+	visibility: visible;
+}
+
+.control-button {
+	display: block;
+}
+
+.stack-base:hover .stack-controls, .stack-leaf:hover .leaf-controls {
 	visibility: visible;
 }
 

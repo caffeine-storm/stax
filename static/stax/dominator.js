@@ -79,17 +79,6 @@ function doCreateStack() {
 	make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
 }
 
-function dropStack( stackid ) {
-    var targ = document.getElementById( "target-stack-" + stackid );
-    var pare = targ.parentNode;
-
-    var fn = function( req ) {
-        pare.removeChild( targ );
-    }
-
-    et.phoneHome( "dropstack", {'stackid': stackid}, fn );
-}
-
 function findParentWithClass( className, elem ) {
 	var itr = elem;
 
@@ -106,9 +95,31 @@ function findParentWithClass( className, elem ) {
 	}
 }
 
-function popNode( divElem ) {
-	var stackid = divElem.getAttribute( "stacknodeid" );
-	var curLayer = findParentWithClass( "stack-layer", divElem );
+function dropStack( imgElem ) {
+	var targ = findParentWithClass( "stack-controls", imgElem );
+	var stackid = targ.getAttribute( "stacknodeid" );
+	var ourList = findParentWithClass( "stack-list" );
+	var theStackDisplay = ourList.parentNode;
+
+	if( theStackDisplay.getAttribute( "class" ) != "stack-display" ) {
+		alert( "Tried to (generate a) drop stack that was not a grand-child of a stack-display" );
+		return function(x){}
+	}
+
+	return function( evt ) {
+
+		var fn = function( req ) {
+			theStackDisplay.removeChild( ourList );
+		}
+
+		et.phoneHome( "dropstack", {'stackid': stackid}, fn );
+	}
+}
+
+function popNode( imgElem ) {
+	var stackid = imgElem.getAttribute( "stacknodeid" );
+	var nodeCtrls = findParentWithClass( "leaf-controls", imgElem );
+	var curLayer = findParentWithClass( "stack-layer", nodeCtrls );
 	var parentLayer = curLayer.parentNode;
 
 	if( parentLayer.getAttribute( "class" ) != "stack-layer" ) {
@@ -127,11 +138,17 @@ function popNode( divElem ) {
 
 
 function onLoad() {
-	// Every div with class 'drop-node-controls' needs onClick to invoke popNode
-	var divs = document.getElementsByClassName( "drop-leaf-controls" );
-	for( var i = 0; i < divs.length; ++i ) {
-		var div = divs.item( i );
-		div.addEventListener( "click", popNode( div ), false );
+	// Every element with class 'drop-node-button' needs onClick to invoke popNode
+	var elems = document.getElementsByClassName( "drop-leaf-button" );
+	for( var i = 0; i < elems.length; ++i ) {
+		var elem = elems.item( i );
+		elem.addEventListener( "click", popNode( elem ), false );
+	}
+
+	elems = document.getElementsByClassName( "drop-stack-button" );
+	for( var i = 0; i < elems.length; ++i ) {
+		var elem = elems.item( i );
+		elem.addEventListener( "click", dropStack( elem ), false );
 	}
 }
 
