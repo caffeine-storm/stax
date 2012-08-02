@@ -18,6 +18,7 @@ class IsNotABase( StaxAPIException ):
 def createStack( stackName ):
     x = StackNode( name=stackName, desc='', tp=NodeType(2) )
     x.save()
+    return x
 
 def dropStack( stackId ):
     # Can only drop base elements with no children

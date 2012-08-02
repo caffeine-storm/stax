@@ -101,12 +101,12 @@ def render( req, widget_name ):
 
 def renderStack( req ):
     stackid = req.GET['stackid']
-    s = get_object_or_404( Stack, pk=stackid )
+    s = get_object_or_404( StackNode, pk=stackid )
 
     return render_to_response(
         'stax/widgets/stack.html',
         {
-            'stack' : stackToMap( s )
+            'stack' : render_stack( req, stackToMap( s ) )
         }
     )
 

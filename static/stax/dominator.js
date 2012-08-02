@@ -62,21 +62,7 @@ function commitNewStack() {
         make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':'target-stack-'+stackid, 'class':'stack-list', 'style':stackwidth }, fnn );
     }
 
-    et.phoneHome( "commitnewstack", {'data':targName}, fn );
-}
-
-function doCreateStack() {
-    var container = document.getElementById( "stack-display" );
-
-    var fn = function( newstack ) {
-        var fc = container.firstChild;
-        container.insertBefore( newstack, fc );
-        var inp = newstack.getElementsByTagName( 'input' )[0];
-        inp.setAttribute( 'onblur', 'commitNewStack()' );
-        inp.focus();
-    };
-
-	make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
+    et.phoneHome( "createstack", {'name':targName}, fn );
 }
 
 function findParentWithClass( className, elem ) {
@@ -136,6 +122,19 @@ function popNode( imgElem ) {
 	};
 }
 
+function createStack( evt ) {
+    var container = document.getElementById( "stack-display" );
+
+    var fn = function( newstack ) {
+        var fc = container.firstChild;
+        container.insertBefore( newstack, fc );
+        var inp = newstack.getElementsByTagName( 'input' )[0];
+        inp.setAttribute( 'onblur', 'commitNewStack()' );
+        inp.focus();
+    };
+
+    make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
+}
 
 function onLoad() {
 	// Every element with class 'drop-node-button' needs onClick to invoke popNode
@@ -149,6 +148,12 @@ function onLoad() {
 	for( var i = 0; i < elems.length; ++i ) {
 		var elem = elems.item( i );
 		elem.addEventListener( "click", dropStack( elem ), false );
+	}
+
+	elems = document.getElementsByClassName( "create-stack-button" );
+	for( var i = 0; i < elems.length; ++i ) {
+		var elem = elems.item( i );
+		elem.addEventListener( "click", createStack, false );
 	}
 }
 

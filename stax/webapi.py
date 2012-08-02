@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from stax import api
 
 def restrictMethod(m):
@@ -12,11 +13,16 @@ def restrictMethod(m):
 
 @restrictMethod( "POST" )
 def doCreateStack( req ):
-    newName = req.POST['data']
+    newName = req.POST['name']
 
-    createStack( newName )
+    s = api.createStack( newName )
 
-    return HttpResponse()
+    resp = render_to_response(
+        "stax/widgets/stack.xml",
+        { 'stack' : { 'id': s.id, 'stackwidth': len( s.name ) } }
+    )
+    resp['Content-Type'] = "text/xml; charset=utf-8"
+    return resp
 
 @restrictMethod( "POST" )
 def doDropStack( req ):

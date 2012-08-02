@@ -5,10 +5,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^stax/$', 'stax.views.frontpage'),
-	url(r'^stax/render/stack.html', 'stax.views.renderStack' ),
+    url(r'^stax/render/stack.html', 'stax.views.renderStack' ),
     url(r'^stax/render/(?P<widget_name>[a-z0-9\.]+)', 'stax.views.render'),
-	url(r'^stax/ajax/createstack$', webapi.doCreateStack),
-	url(r'^stax/ajax/dropstack$', webapi.doDropStack),
+    url(r'^stax/ajax/createstack$', webapi.doCreateStack),
+    url(r'^stax/ajax/dropstack$', webapi.doDropStack),
     url(r'^stax/ajax/push$', webapi.doPush),
     url(r'^stax/ajax/pop$', webapi.doPop),
     url(r'^stax/ajax/rename$', webapi.doRename),
