@@ -11,18 +11,15 @@ def restrictMethod(m):
     return wrapper
 
 @restrictMethod( "POST" )
-def doPop( req ):
-    stackID = req.POST["stackid"]
+def doCreateStack( req ):
+    newName = req.POST['data']
 
-    try:
-        api.doPop( stackID )
-    except api.StaxAPIException as e:
-        return HttpResponse( str( e ), status=409 )
+    createStack( newName )
 
     return HttpResponse()
 
 @restrictMethod( "POST" )
-def dropStack( req ):
+def doDropStack( req ):
     theid = req.POST['stackid']
 
     try:
@@ -38,9 +35,20 @@ def doPush( req ):
     entryVal = req.POST["item"]
 
     try:
-        api.doPush( stackID, entryVal )
+        api.push( stackID, entryVal )
     except Http404:
         raise
+
+    return HttpResponse()
+
+@restrictMethod( "POST" )
+def doPop( req ):
+    stackID = req.POST["stackid"]
+
+    try:
+        api.pop( stackID )
+    except api.StaxAPIException as e:
+        return HttpResponse( str( e ), status=409 )
 
     return HttpResponse()
 
@@ -49,21 +57,7 @@ def doRename( req ):
     stackID = req.POST["stackid"]
     newName = req.POST["data"]
 
-    api.doRename( stackID, newName )
+    api.rename( stackID, newName )
 
     return HttpResponse()
-
-@restrictMethod( "POST" )
-def doCommitNewStack( req ):
-    ctx = req.POST.dict()
-    s = Stack( name = ctx['data'] )
-    s.save()
-
-    return render_to_response(
-        'stax/widgets/stack.xml',
-        {
-            'stack' : stackToMap( s ),
-        },
-        mimetype = "text/xml"
-    )
 
