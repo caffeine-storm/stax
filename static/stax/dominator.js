@@ -98,11 +98,11 @@ function findParentWithClass( className, elem ) {
 function dropStack( imgElem ) {
 	var targ = findParentWithClass( "stack-controls", imgElem );
 	var stackid = targ.getAttribute( "stacknodeid" );
-	var ourList = findParentWithClass( "stack-list" );
+	var ourList = findParentWithClass( "stack-list", targ );
 	var theStackDisplay = ourList.parentNode;
 
-	if( theStackDisplay.getAttribute( "class" ) != "stack-display" ) {
-		alert( "Tried to (generate a) drop stack that was not a grand-child of a stack-display" );
+	if( theStackDisplay != document.getElementById( "stack-display" ) ) {
+		alert( "Tried to (generate a) drop stack that was not a grand-child of the stack-display" );
 		return function(x){}
 	}
 
@@ -117,8 +117,8 @@ function dropStack( imgElem ) {
 }
 
 function popNode( imgElem ) {
-	var stackid = imgElem.getAttribute( "stacknodeid" );
 	var nodeCtrls = findParentWithClass( "leaf-controls", imgElem );
+	var stackid = nodeCtrls.getAttribute( "stacknodeid" );
 	var curLayer = findParentWithClass( "stack-layer", nodeCtrls );
 	var parentLayer = curLayer.parentNode;
 

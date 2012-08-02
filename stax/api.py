@@ -50,3 +50,7 @@ def doRename( stackId, newName ):
     st.name = newName
     st.save()
 
+def createStack( stackName ):
+    x = StackNode( name=stackName, desc='', tp=NodeType(2) )
+    x.save()
+
