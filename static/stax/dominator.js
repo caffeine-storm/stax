@@ -171,6 +171,9 @@ function commitNewNode( parentId, getText, layer ) {
     function cleanUp( req ) {
         // Re-render the inside of layer
         layer.innerHTML = req.responseText;
+
+        // Attach listeners that are expected
+        registerCallbacks( layer );
     }
 
     et.phoneHome( "pushandrender",  { "id": parentId, "item": getText() }, cleanUp );
@@ -212,39 +215,44 @@ function nodeDrop( nd ) {
     }
 }
 
-function onLoad() {
+function registerCallbacks( rootNode ) {
 	// Every element with class 'drop-node-button' needs onClick to invoke popNode
-	var elems = document.getElementsByClassName( "drop-leaf-button" );
+	var elems = rootNode.getElementsByClassName( "drop-leaf-button" );
 	for( var i = 0; i < elems.length; ++i ) {
 		var elem = elems.item( i );
 		elem.addEventListener( "click", popNode( elem ), false );
 	}
 
-	elems = document.getElementsByClassName( "drop-stack-button" );
+	elems = rootNode.getElementsByClassName( "drop-stack-button" );
 	for( var i = 0; i < elems.length; ++i ) {
 		var elem = elems.item( i );
 		elem.addEventListener( "click", dropStack( elem ), false );
 	}
 
-	elems = document.getElementsByClassName( "create-stack-button" );
+	elems = rootNode.getElementsByClassName( "create-stack-button" );
 	for( var i = 0; i < elems.length; ++i ) {
 		var elem = elems.item( i );
 		elem.addEventListener( "click", createStack, false );
 	}
 
-	elems = document.getElementsByClassName( "node-maker" );
+	elems = rootNode.getElementsByClassName( "node-maker" );
 	for( var i = 0; i < elems.length; ++i ) {
 		var elem = elems.item( i );
 		elem.addEventListener( "dragstart", newNodeDragStart, false );
 	}
 
-    elems = document.getElementsByClassName( "stack-leaf" );
+    elems = rootNode.getElementsByClassName( "stack-leaf" );
     for( var i = 0; i < elems.length; ++i ) {
         var elem = elems.item( i );
         elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
         elem.addEventListener( "dragover", nodeDragOver( elem ), false );
         elem.addEventListener( "drop", nodeDrop( elem ), false );
     }
+
+}
+
+function onLoad() {
+    registerCallbacks( document );
 }
 
 document.addEventListener( "DOMContentLoaded", onLoad, false );
