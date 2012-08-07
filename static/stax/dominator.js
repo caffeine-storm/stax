@@ -35,7 +35,7 @@ function make_widget( name, ctx, elem, attrs, cb ) {
     et.serverRender( name, ctx, ret, cb );
 }
 
-function commitNewStack() {
+function commitNewStack( evt ) {
     var targ = document.getElementById( "newstack" );
     var targName = targ.getElementsByTagName( "input" )[0].value;
 
@@ -144,7 +144,7 @@ function createStack( evt ) {
         var fc = container.firstChild;
         container.insertBefore( newstack, fc );
         var inp = newstack.getElementsByTagName( 'input' )[0];
-        inp.setAttribute( 'onblur', 'commitNewStack()' );
+        inp.addEventListener( 'blur', commitNewStack );
         inp.focus();
     };
 
@@ -166,12 +166,30 @@ function nodeDragOver( nd ) {
     }
 }
 
+function commitNewNode( parentId, getText, layer ) {
+    et.phoneHome( "push",  { "id": parentId, "item": getText() }, function(req){} );
+}
+
 function doPushNode( elem ) {
     var leaf = findParentWithClass( "stack-leaf", elem );
+    var container = findParentWithClass( "stack-layer", leaf );
     var controls = findChildWithClass( "leaf-controls", leaf );
     var stackid = controls.getAttribute( "stacknodeid" );
+
+    var fn = function( newlayer ) {
+        var fc = container.firstChild;
+        container.insertBefore( newlayer, fc );
+        var inp = newlayer.getElementsByTagName( 'input' )[0];
+
+        function getText() {
+            return inp.value;
+        }
+
+        inp.addEventListener( 'blur', function(evt){ commitNewNode( stackid, getText, newlayer ); }, false );
+        inp.focus();
+    };
     
-    
+    make_widget( "newnodelayer.html", {}, "div", { 'stack': { 'class': 'stack-node', 'id': -1 } }, fn );
 }
 
 function nodeDrop( nd ) {
