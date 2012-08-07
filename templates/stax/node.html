@@ -5,9 +5,9 @@
     </span>
 
 {% if stack.class == "stack-base" %}
-{% include "stax/widgets/dropstack.html" with stackid=stack.id %}
+{% include "stax/widgets/basenodecontrols.html" with stackid=stack.id %}
 {% elif stack.class == "stack-leaf" %}
-{% include "stax/widgets/dropleaf.html" with stackid=stack.id %}
+{% include "stax/widgets/leafcontrols.html" with stackid=stack.id %}
 {% endif %}
 
 </li>
