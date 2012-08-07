@@ -39,6 +39,7 @@ def push( parentId, entryVal ):
     newNode.save()
 
     Dependency( parent=oldnode, child=newNode ).save()
+    return newNode.id
 
 def pop( nodeId ):
     # Can only 'pop' top elements

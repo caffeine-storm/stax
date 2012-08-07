@@ -41,11 +41,11 @@ def doPush( req ):
     entryVal = req.POST["item"]
 
     try:
-        api.push( stackID, entryVal )
+        newnodeid = api.push( stackID, entryVal )
     except Http404:
         raise
 
-    return HttpResponse()
+    return HttpResponse( unicode( newnodeid ) )
 
 @restrictMethod( "POST" )
 def doPop( req ):

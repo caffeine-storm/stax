@@ -167,7 +167,13 @@ function nodeDragOver( nd ) {
 }
 
 function commitNewNode( parentId, getText, layer ) {
-    et.phoneHome( "push",  { "id": parentId, "item": getText() }, function(req){} );
+
+    function cleanUp( req ) {
+        // Re-render the inside of layer
+        layer.innerHTML = req.responseText;
+    }
+
+    et.phoneHome( "pushandrender",  { "id": parentId, "item": getText() }, cleanUp );
 }
 
 function doPushNode( elem ) {
@@ -177,6 +183,8 @@ function doPushNode( elem ) {
     var stackid = controls.getAttribute( "stacknodeid" );
 
     var fn = function( newlayer ) {
+        leaf.removeChild( controls );
+
         var fc = container.firstChild;
         container.insertBefore( newlayer, fc );
         var inp = newlayer.getElementsByTagName( 'input' )[0];
@@ -189,7 +197,7 @@ function doPushNode( elem ) {
         inp.focus();
     };
     
-    make_widget( "newnodelayer.html", {}, "div", { 'stack': { 'class': 'stack-node', 'id': -1 } }, fn );
+    make_widget( "newnodelayer.html", {}, "div", { 'class': 'stack-layer' }, fn );
 }
 
 function nodeDrop( nd ) {
