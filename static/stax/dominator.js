@@ -69,8 +69,6 @@ function findParentWithClass( className, elem ) {
 	var itr = elem;
 
 	while( true ) {
-		itr = itr.parentNode;
-
 		if( itr == null || itr == document ) {
 			throw new Error("Couldn't find elem with class '" + className + "'" );
 		}
@@ -78,6 +76,8 @@ function findParentWithClass( className, elem ) {
 		if( itr.getAttribute( "class" ) == className ) {
 			return itr;
 		}
+
+		itr = itr.parentNode;
 	}
 }
 
@@ -184,12 +184,26 @@ function doPushNode( elem ) {
     try {
         leaf = findParentWithClass( "stack-leaf", elem );
     } catch( Exception ) {
-        leaf = findParentWithClass( "stack-node", elem );
+        try {
+            leaf = findParentWithClass( "stack-node", elem );
+        } catch (Exception) {
+            try {
+                leaf = findParentWithClass( "stack-base", elem );
+            } catch(Exception) {
+                throw new Error( "couldn't find a target node above " + elem );
+            }
+        }
     }
     
 
     var container = findParentWithClass( "stack-layer", leaf );
     var controls = findChildWithClass( "leaf-controls", leaf );
+    if( controls == null ) {
+        controls = findChildWithClass( "stack-controls", leaf );
+    }   
+    if( controls == null ) {
+        throw new Error( "Couldn't find the control panel" );
+    }
     var stackid = controls.getAttribute( "stacknodeid" );
 
     var fn = function( newlayer ) {
@@ -255,6 +269,14 @@ function registerCallbacks( rootNode ) {
     }
 
     elems = rootNode.getElementsByClassName( "stack-node" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
+        elem.addEventListener( "dragover", nodeDragOver( elem ), false );
+        elem.addEventListener( "drop", nodeDrop( elem ), false );
+    }
+
+    elems = rootNode.getElementsByClassName( "stack-base" );
     for( var i = 0; i < elems.length; ++i ) {
         var elem = elems.item( i );
         elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
