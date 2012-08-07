@@ -4,7 +4,7 @@
     text-align: center;
 }
 
-.stack-node, .stack-base, .stack-leaf {
+.node-maker li, .stack-node, .stack-base, .stack-leaf {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
@@ -13,7 +13,7 @@
     display: inline-block;
 }
 
-.stack-node, .stack-leaf {
+.node-maker li, .stack-node, .stack-leaf {
     padding: 5px;
     border: solid 2px black;
     background-color: #5487FF;
