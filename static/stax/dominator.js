@@ -180,14 +180,19 @@ function commitNewNode( parentId, getText, layer ) {
 }
 
 function doPushNode( elem ) {
-    var leaf = findParentWithClass( "stack-leaf", elem );
+    var leaf = null;
+    try {
+        leaf = findParentWithClass( "stack-leaf", elem );
+    } catch( Exception ) {
+        leaf = findParentWithClass( "stack-node", elem );
+    }
+    
+
     var container = findParentWithClass( "stack-layer", leaf );
     var controls = findChildWithClass( "leaf-controls", leaf );
     var stackid = controls.getAttribute( "stacknodeid" );
 
     var fn = function( newlayer ) {
-        leaf.removeChild( controls );
-
         var fc = container.firstChild;
         container.insertBefore( newlayer, fc );
         var inp = newlayer.getElementsByTagName( 'input' )[0];
@@ -249,6 +254,13 @@ function registerCallbacks( rootNode ) {
         elem.addEventListener( "drop", nodeDrop( elem ), false );
     }
 
+    elems = rootNode.getElementsByClassName( "stack-node" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
+        elem.addEventListener( "dragover", nodeDragOver( elem ), false );
+        elem.addEventListener( "drop", nodeDrop( elem ), false );
+    }
 }
 
 function onLoad() {

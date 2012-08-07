@@ -6,7 +6,7 @@
 
 {% if stack.class == "stack-base" %}
 {% include "stax/widgets/basenodecontrols.html" with stackid=stack.id %}
-{% elif stack.class == "stack-leaf" %}
+{% elif stack.class == "stack-leaf" or stack.class == "stack-node" %}
 {% include "stax/widgets/leafcontrols.html" with stackid=stack.id %}
 {% endif %}
 
