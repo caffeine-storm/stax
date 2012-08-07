@@ -81,6 +81,21 @@ function findParentWithClass( className, elem ) {
 	}
 }
 
+function findChildWithClass( className, elem ) {
+    if( elem.nodeType != Node.ELEMENT_NODE ) return null;
+    if( elem.getAttribute( "class" ) == className ) {
+        return elem;
+    }
+    var children = elem.childNodes;
+    for( var i = 0; i < children.length; ++i ) {
+        var c = children.item( i );
+        var x = findChildWithClass( className, c );
+        if( x != null ) return x;
+    }
+
+    return null;
+}
+
 function dropStack( imgElem ) {
 	var targ = findParentWithClass( "stack-controls", imgElem );
 	var stackid = targ.getAttribute( "stacknodeid" );
@@ -136,6 +151,41 @@ function createStack( evt ) {
     make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
 }
 
+function newNodeDragStart( evt ) {
+    evt.dataTransfer.effectAllowed = "copy";
+    evt.dataTransfer.setData( "text/plain", "push-node" );
+}
+
+function nodeDragOver( nd ) {
+    return function( evt ) {
+        if( evt.dataTransfer.types.contains( "text/plain" ) ) {
+            if( evt.dataTransfer.getData( "text/plain" ) == "push-node" ) {
+                evt.preventDefault(); // Mark this as a drop target
+            }
+        }
+    }
+}
+
+function doPushNode( elem ) {
+    var leaf = findParentWithClass( "stack-leaf", elem );
+    var controls = findChildWithClass( "leaf-controls", leaf );
+    var stackid = controls.getAttribute( "stacknodeid" );
+    
+    
+}
+
+function nodeDrop( nd ) {
+    return function( evt ) {
+        if( evt.dataTransfer.types.contains( "text/plain" ) ) {
+            if( evt.dataTransfer.getData( "text/plain" ) == "push-node" ) {
+                evt.preventDefault(); // Mark this as a drop target
+
+                doPushNode( evt.target );
+            }
+        }
+    }
+}
+
 function onLoad() {
 	// Every element with class 'drop-node-button' needs onClick to invoke popNode
 	var elems = document.getElementsByClassName( "drop-leaf-button" );
@@ -155,6 +205,20 @@ function onLoad() {
 		var elem = elems.item( i );
 		elem.addEventListener( "click", createStack, false );
 	}
+
+	elems = document.getElementsByClassName( "node-maker" );
+	for( var i = 0; i < elems.length; ++i ) {
+		var elem = elems.item( i );
+		elem.addEventListener( "dragstart", newNodeDragStart, false );
+	}
+
+    elems = document.getElementsByClassName( "stack-leaf" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
+        elem.addEventListener( "dragover", nodeDragOver( elem ), false );
+        elem.addEventListener( "drop", nodeDrop( elem ), false );
+    }
 }
 
 document.addEventListener( "DOMContentLoaded", onLoad, false );
