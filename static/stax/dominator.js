@@ -54,6 +54,7 @@ function commitNewStack( evt ) {
             var sd = targ.parentNode;
             sd.removeChild( targ );
             sd.appendChild( newstack );
+            registerCallbacks( newstack );
         }
 
         make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':'target-stack-'+stackid, 'class':'stack-list' }, fnn );
