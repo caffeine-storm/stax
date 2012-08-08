@@ -16,18 +16,11 @@ def stackToMap( st ):
 
     tmp = Dependency.objects.filter( parent=st )
 
-    thiswidth = max( 20, len( str( st.name ) ) )
-    childwidth = 0
-
-
     if len( tmp ) == 0: # There were no children
         ret["class"] = "stack-leaf"
     else:
         for dep in tmp:
             ret["children"].append( stackToMap( dep.child ) )
-            childwidth += ret["children"][-1]["width"]
-
-    ret["width"] = max( childwidth, thiswidth )
 
     return ret
 
@@ -45,13 +38,11 @@ def get_stax():
 
 def render_stack( req, stk ):
     from django.template.loader import render_to_string
-    payload = "lol :D"
 
     if len( stk["children"] ) == 0:
         # No Children
         return {
             'id' : stk["id"],
-            'width' : stk["width"],
             'rendered' : '<div class="stack-layer">' + render_to_string( 'stax/node.html', { 'stack' : stk } ) + '</div>'
         }
     else:
@@ -62,7 +53,6 @@ def render_stack( req, stk ):
 
     return {
         'id' : stk["id"],
-        'width' : stk["width"],
         'rendered' : payload
     }
 

@@ -21,7 +21,7 @@
 {% if all_stax %}
 
 {% for s in all_stax %}
-<ul class="stack-list" id="target-stack-{{ s.id }}" style="width: {{ s.width }}ex">
+<ul class="stack-list" id="target-stack-{{ s.id }}">
 {% include "stax/widgets/stack.html" with stack=s only %}
 </ul>
 {% endfor %}
