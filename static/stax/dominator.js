@@ -44,11 +44,8 @@ function commitNewStack( evt ) {
 
         var x = xmlDoc.getElementsByTagName( "stack" )[0];
         var stackid = x.getElementsByTagName( "stackid" )[0].textContent;
-        var stackwidth = 'width: ';
-        stackwidth += x.getElementsByTagName( "stackwidth" )[0].textContent;
-        stackwidth += 'ex;';
 
-        if( stackid == null || stackwidth == null ) {
+        if( stackid == null ) {
             alert( "couldn't parse xml doc!" );
             return;
         }
@@ -59,7 +56,7 @@ function commitNewStack( evt ) {
             sd.appendChild( newstack );
         }
 
-        make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':'target-stack-'+stackid, 'class':'stack-list', 'style':stackwidth }, fnn );
+        make_widget( "stack.html", {'stackid':stackid}, "ul", { 'id':'target-stack-'+stackid, 'class':'stack-list' }, fnn );
     }
 
     et.phoneHome( "createstack", {'name':targName}, fn );

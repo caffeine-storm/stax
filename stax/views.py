@@ -97,7 +97,7 @@ def renderStack( req ):
     return render_to_response(
         'stax/widgets/stack.html',
         {
-            'stack' : render_stack( req, stackToMap( s ) )
+            'stack' : render_stack( req, stackBaseToMap( s ) )
         }
     )
 
