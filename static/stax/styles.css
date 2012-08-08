@@ -11,6 +11,7 @@
 
 .stack-layer {
     display: inline-block;
+    white-space: nowrap;
 }
 
 .node-maker li, .stack-node, .stack-leaf {
@@ -23,6 +24,10 @@
 .stack-base {
     background-color: #DEDEDE;
 	padding: 7px;
+}
+
+.stack-leaf {
+    display: block;
 }
 
 .stack-leaf-text {
@@ -49,8 +54,8 @@
 
 .stack-controls, .leaf-controls {
 	visibility: hidden;
-	display: inline;
-	float: right;
+	display: inline-block;
+	/* float: right; */
 	cursor: pointer;
 }
 
