@@ -39,6 +39,10 @@
 .stack-base-text {
 }
 
+.stack-base-text input {
+    display: inline-block;
+}
+
 .add-stack-toolbar {
 	background-color: #C4C4C4;
 	position: fixed;

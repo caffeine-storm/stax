@@ -35,9 +35,13 @@ function make_widget( name, ctx, elem, attrs, cb ) {
     et.serverRender( name, ctx, ret, cb );
 }
 
-function commitNewStack( evt ) {
+function doCommitNewStack( rejectThisName, createStackButton ) { return function( evt ) {
     var targ = document.getElementById( "newstack" );
     var targName = targ.getElementsByTagName( "input" )[0].value;
+
+    if( util.wsTrim( targName ) == rejectThisName ) {
+        return;
+    }
 
     var fn = function( req ) {
         var xmlDoc = req.responseXML;
@@ -53,6 +57,9 @@ function commitNewStack( evt ) {
         var fnn = function( newstack ) {
             var sd = targ.parentNode;
             sd.removeChild( targ );
+
+            // TODO: once the create stack button is getting disabled, re-enable it here
+
             sd.appendChild( newstack );
             registerCallbacks( newstack );
         }
@@ -61,7 +68,7 @@ function commitNewStack( evt ) {
     }
 
     et.phoneHome( "createstack", {'name':targName}, fn );
-}
+}}
 
 function findParentWithClass( className, elem ) {
 	var itr = elem;
@@ -136,17 +143,19 @@ function popNode( imgElem ) {
 }
 
 function createStack( evt ) {
+    // TODO: Disable the create stack button
+
     var container = document.getElementById( "stack-display" );
 
     var fn = function( newstack ) {
         var fc = container.firstChild;
         container.insertBefore( newstack, fc );
         var inp = newstack.getElementsByTagName( 'input' )[0];
-        inp.addEventListener( 'blur', commitNewStack );
+        inp.addEventListener( 'blur', doCommitNewStack( inp.value, evt.target ) );
         inp.focus();
     };
 
-    make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list', 'style':'width: 25ex' }, fn );
+    make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list' }, fn );
 }
 
 function newNodeDragStart( evt ) {
@@ -165,6 +174,15 @@ function nodeDragOver( nd ) {
 }
 
 function commitNewNode( parentId, getText, layer ) {
+    var txt = getText();
+
+    function isValidNodeName( txt ) {
+        return util.wsTrim( txt ).length != 0;
+    }
+    
+    if( ! isValidNodeName( txt ) ) {
+        return;
+    }
 
     function cleanUp( req ) {
         // Re-render the inside of layer
@@ -174,7 +192,7 @@ function commitNewNode( parentId, getText, layer ) {
         registerCallbacks( layer );
     }
 
-    et.phoneHome( "pushandrender",  { "id": parentId, "item": getText() }, cleanUp );
+    et.phoneHome( "pushandrender",  { "id": parentId, "item": txt }, cleanUp );
 }
 
 function doPushNode( elem ) {
