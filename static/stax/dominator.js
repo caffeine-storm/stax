@@ -205,8 +205,8 @@ function doPushNode( elem ) {
     var stackid = controls.getAttribute( "stacknodeid" );
 
     var fn = function( newlayer ) {
-        var fc = container.firstChild;
-        container.insertBefore( newlayer, fc );
+        // Insert the new layer just before the last child element (ie leaf)
+        container.insertBefore( newlayer, leaf );
         var inp = newlayer.getElementsByTagName( 'input' )[0];
 
         function getText() {
