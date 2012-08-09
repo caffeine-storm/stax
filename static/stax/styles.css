@@ -9,6 +9,10 @@
     border-top-right-radius: 12px;
 }
 
+.node-maker li {
+    cursor: move;
+}
+
 .stack-layer {
     display: inline-block;
     white-space: nowrap;
