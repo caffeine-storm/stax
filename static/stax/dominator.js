@@ -101,6 +101,18 @@ function findChildWithClass( className, elem ) {
     return null;
 }
 
+function findChildWithClassEx( className, root ) {
+    var children = root.childNodes;
+
+    for( var i = 0; i < children.length; ++i ) {
+        var c = children.item( i );
+        var ret = findChildWithClass( className, c );
+        if( ret != null ) return ret;
+    }
+
+    return null;
+}
+
 function dropStack( imgElem ) {
 	var targ = findParentWithClass( "stack-controls", imgElem );
 	var stackid = targ.getAttribute( "stacknodeid" );
@@ -136,6 +148,18 @@ function popNode( imgElem ) {
 	return function( evt ) {
 		var fn = function( req ) {
 			parentLayer.removeChild( curLayer );
+
+            // If there are no stack-layer divs under parentLayer, then
+            // the li in parentLayer has changed from a stack-node to a stack
+            // leaf
+            if( findChildWithClassEx( "stack-layer", parentLayer ) == null ) {
+                var newLeaf = findChildWithClass( "stack-node", parentLayer );
+                if( newLeaf == null ) {
+                    // Must've been the last non-base node in the stack
+                    return;
+                }
+                newLeaf.setAttribute( "class", "stack-leaf" );
+            }
 		};
 
 		et.phoneHome( "pop", {'stackid': stackid}, fn );
