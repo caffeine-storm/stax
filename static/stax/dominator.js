@@ -227,6 +227,11 @@ function doPushNode( elem ) {
         container.insertBefore( newlayer, leaf );
         var inp = newlayer.getElementsByTagName( 'input' )[0];
 
+        // If the parent was a leaf, it isn't anymore...
+        if( leaf.getAttribute( "class" ) == "stack-leaf" ) {
+            leaf.setAttribute( "class", "stack-node" );
+        }
+
         function getText() {
             return inp.value;
         }
