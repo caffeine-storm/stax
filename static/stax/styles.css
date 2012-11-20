@@ -1,7 +1,8 @@
 .stack-list {
     list-style-type: none;
-    font-size: 18pt;
+    font-size: 8pt;
     text-align: center;
+    display: inline-block;
 }
 
 .node-maker li, .stack-node, .stack-base, .stack-leaf {
@@ -27,7 +28,7 @@
 
 .stack-base {
     background-color: #DEDEDE;
-	padding: 7px;
+    padding: 7px;
 }
 
 .stack-leaf {
@@ -48,34 +49,34 @@
 }
 
 .add-stack-toolbar {
-	background-color: #C4C4C4;
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	z-index: 42;
+    background-color: #C4C4C4;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 42;
 }
 
 #stack-display {
-	position: relative;
-	top: 30px;
+    position: relative;
+    top: 30px;
 }
 
 .stack-controls, .leaf-controls {
-	visibility: hidden;
-	display: inline-block;
-	/* float: right; */
-	cursor: pointer;
+    visibility: hidden;
+    display: inline-block;
+    /* float: right; */
+    cursor: pointer;
 }
 
 .stack-controls:hover, .leaf-controls:hover {
-	visibility: visible;
+    visibility: visible;
 }
 
 .control-button {
-	display: block;
+    display: block;
 }
 
 .stack-base:hover .stack-controls, .stack-leaf:hover .leaf-controls {
-	visibility: visible;
+    visibility: visible;
 }
 
