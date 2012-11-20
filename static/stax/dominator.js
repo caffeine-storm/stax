@@ -71,19 +71,19 @@ function doCommitNewStack( rejectThisName, createStackButton ) { return function
 }}
 
 function findParentWithClass( className, elem ) {
-	var itr = elem;
+    var itr = elem;
 
-	while( true ) {
-		if( itr == null || itr == document ) {
-			throw new Error("Couldn't find elem with class '" + className + "'" );
-		}
+    while( true ) {
+        if( itr == null || itr == document ) {
+            throw new Error("Couldn't find elem with class '" + className + "'" );
+        }
 
-		if( itr.getAttribute( "class" ) == className ) {
-			return itr;
-		}
+        if( itr.getAttribute( "class" ) == className ) {
+            return itr;
+        }
 
-		itr = itr.parentNode;
-	}
+        itr = itr.parentNode;
+    }
 }
 
 function findChildWithClass( className, elem ) {
@@ -114,40 +114,40 @@ function findChildWithClassEx( className, root ) {
 }
 
 function dropStack( imgElem ) {
-	var targ = findParentWithClass( "stack-controls", imgElem );
-	var stackid = targ.getAttribute( "stacknodeid" );
-	var ourList = findParentWithClass( "stack-list", targ );
-	var theStackDisplay = ourList.parentNode;
+    var targ = findParentWithClass( "stack-controls", imgElem );
+    var stackid = targ.getAttribute( "stacknodeid" );
+    var ourList = findParentWithClass( "stack-list", targ );
+    var theStackDisplay = ourList.parentNode;
 
-	if( theStackDisplay != document.getElementById( "stack-display" ) ) {
-		alert( "Tried to (generate a) drop stack that was not a grand-child of the stack-display" );
-		return function(x){}
-	}
+    if( theStackDisplay != document.getElementById( "stack-display" ) ) {
+        alert( "Tried to (generate a) drop stack that was not a grand-child of the stack-display" );
+        return function(x){}
+    }
 
-	return function( evt ) {
+    return function( evt ) {
 
-		var fn = function( req ) {
-			theStackDisplay.removeChild( ourList );
-		}
+        var fn = function( req ) {
+            theStackDisplay.removeChild( ourList );
+        }
 
-		et.phoneHome( "dropstack", {'stackid': stackid}, fn );
-	}
+        et.phoneHome( "dropstack", {'stackid': stackid}, fn );
+    }
 }
 
 function popNode( imgElem ) {
-	var nodeCtrls = findParentWithClass( "leaf-controls", imgElem );
-	var stackid = nodeCtrls.getAttribute( "stacknodeid" );
-	var curLayer = findParentWithClass( "stack-layer", nodeCtrls );
-	var parentLayer = curLayer.parentNode;
+    var nodeCtrls = findParentWithClass( "leaf-controls", imgElem );
+    var stackid = nodeCtrls.getAttribute( "stacknodeid" );
+    var curLayer = findParentWithClass( "stack-layer", nodeCtrls );
+    var parentLayer = curLayer.parentNode;
 
-	if( parentLayer.getAttribute( "class" ) != "stack-layer" ) {
-		alert( "Error: expecting stack-layer as parent!!!" );
-		return function(x){};
-	}
+    if( parentLayer.getAttribute( "class" ) != "stack-layer" ) {
+        alert( "Error: expecting stack-layer as parent!!!" );
+        return function(x){};
+    }
 
-	return function( evt ) {
-		var fn = function( req ) {
-			parentLayer.removeChild( curLayer );
+    return function( evt ) {
+        var fn = function( req ) {
+            parentLayer.removeChild( curLayer );
 
             // If there are no stack-layer divs under parentLayer, then
             // the li in parentLayer has changed from a stack-node to a stack
@@ -160,10 +160,10 @@ function popNode( imgElem ) {
                 }
                 newLeaf.setAttribute( "class", "stack-leaf" );
             }
-		};
+        };
 
-		et.phoneHome( "pop", {'stackid': stackid}, fn );
-	};
+        et.phoneHome( "pop", {'stackid': stackid}, fn );
+    };
 }
 
 function createStack( evt ) {
@@ -203,7 +203,7 @@ function commitNewNode( parentId, getText, layer ) {
     function isValidNodeName( txt ) {
         return util.wsTrim( txt ).length != 0;
     }
-    
+
     if( ! isValidNodeName( txt ) ) {
         return;
     }
@@ -234,13 +234,13 @@ function doPushNode( elem ) {
             }
         }
     }
-    
+
 
     var container = findParentWithClass( "stack-layer", leaf );
     var controls = findChildWithClass( "leaf-controls", leaf );
     if( controls == null ) {
         controls = findChildWithClass( "stack-controls", leaf );
-    }   
+    }
     if( controls == null ) {
         throw new Error( "Couldn't find the control panel" );
     }
@@ -263,7 +263,7 @@ function doPushNode( elem ) {
         inp.addEventListener( 'blur', function(evt){ commitNewNode( stackid, getText, newlayer ); }, false );
         inp.focus();
     };
-    
+
     make_widget( "newnodelayer.html", {}, "div", { 'class': 'stack-layer' }, fn );
 }
 
@@ -280,30 +280,30 @@ function nodeDrop( nd ) {
 }
 
 function registerCallbacks( rootNode ) {
-	// Every element with class 'drop-node-button' needs onClick to invoke popNode
-	var elems = rootNode.getElementsByClassName( "drop-leaf-button" );
-	for( var i = 0; i < elems.length; ++i ) {
-		var elem = elems.item( i );
-		elem.addEventListener( "click", popNode( elem ), false );
-	}
+    // Every element with class 'drop-node-button' needs onClick to invoke popNode
+    var elems = rootNode.getElementsByClassName( "drop-leaf-button" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "click", popNode( elem ), false );
+    }
 
-	elems = rootNode.getElementsByClassName( "drop-stack-button" );
-	for( var i = 0; i < elems.length; ++i ) {
-		var elem = elems.item( i );
-		elem.addEventListener( "click", dropStack( elem ), false );
-	}
+    elems = rootNode.getElementsByClassName( "drop-stack-button" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "click", dropStack( elem ), false );
+    }
 
-	elems = rootNode.getElementsByClassName( "create-stack-button" );
-	for( var i = 0; i < elems.length; ++i ) {
-		var elem = elems.item( i );
-		elem.addEventListener( "click", createStack, false );
-	}
+    elems = rootNode.getElementsByClassName( "create-stack-button" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "click", createStack, false );
+    }
 
-	elems = rootNode.getElementsByClassName( "node-maker" );
-	for( var i = 0; i < elems.length; ++i ) {
-		var elem = elems.item( i );
-		elem.addEventListener( "dragstart", newNodeDragStart, false );
-	}
+    elems = rootNode.getElementsByClassName( "node-maker" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "dragstart", newNodeDragStart, false );
+    }
 
     elems = rootNode.getElementsByClassName( "stack-leaf" );
     for( var i = 0; i < elems.length; ++i ) {

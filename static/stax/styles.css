@@ -31,6 +31,10 @@
     padding: 7px;
 }
 
+.stack-node-input {
+    font-size: 8pt;
+}
+
 .stack-leaf {
     display: block;
 }
