@@ -65,5 +65,5 @@ def doRename( req ):
 
     api.rename( stackID, newName )
 
-    return HttpResponse()
+    return HttpResponse( unicode( newName ) )
 

@@ -279,6 +279,25 @@ function nodeDrop( nd ) {
     }
 }
 
+function getStackNodeID( nd ) {
+    var ctrls = nd.parentNode.getElementsByClassName( 'leaf-controls' )[0];
+    return ctrls.getAttribute( 'stacknodeid' );
+}
+
+function editNodeName( nd ) {
+    return function( evt ) {
+        et.serverRender( "editnameinput.html", {'nodename':nd.innerHTML}, nd, function( x ) {
+            var inp = nd.getElementsByTagName( 'input' )[0];
+            inp.focus();
+            inp.addEventListener( 'blur', function(evt) {
+                et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
+                    nd.innerHTML = req.responseText;
+                });
+            }, false );
+        });
+    }
+}
+
 function registerCallbacks( rootNode ) {
     // Every element with class 'drop-node-button' needs onClick to invoke popNode
     var elems = rootNode.getElementsByClassName( "drop-leaf-button" );
@@ -311,6 +330,12 @@ function registerCallbacks( rootNode ) {
         elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
         elem.addEventListener( "dragover", nodeDragOver( elem ), false );
         elem.addEventListener( "drop", nodeDrop( elem ), false );
+    }
+
+    elems = rootNode.getElementsByClassName( "stack-leaf-text" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "click", editNodeName( elem ), false );
     }
 
     elems = rootNode.getElementsByClassName( "stack-node" );

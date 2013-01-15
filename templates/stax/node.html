@@ -1,8 +1,6 @@
 
 <li class="{{stack.class}}" >
-    <span class="{{stack.class}}-text">
-        {{ stack.name }}
-    </span>
+    <span class="{{stack.class}}-text">{{ stack.name }}</span>
 
 {% if stack.class == "stack-base" %}
 {% include "stax/widgets/basenodecontrols.html" with stackid=stack.id %}
