@@ -285,17 +285,21 @@ function getStackNodeID( nd ) {
 }
 
 function editNodeName( nd ) {
-    return function( evt ) {
+    var ret = undefined;
+    ret = function( evt ) {
         et.serverRender( "editnameinput.html", {'nodename':nd.innerHTML}, nd, function( x ) {
+            nd.removeEventListener( "click", ret, false );
             var inp = nd.getElementsByTagName( 'input' )[0];
             inp.focus();
             inp.addEventListener( 'blur', function(evt) {
                 et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
                     nd.innerHTML = req.responseText;
+                    nd.addEventListener( "click", editNodeName( nd ), false );
                 });
             }, false );
         });
     }
+    return ret;
 }
 
 function registerCallbacks( rootNode ) {
