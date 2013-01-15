@@ -110,3 +110,7 @@ def doPushAndRender( req ):
         { 'stack' : stackToMap( StackNode.objects.get( pk=theid ) ) }
     )
 
+def faviconRedirect( req ):
+    from django.http import HttpResponseRedirect
+    return HttpResponseRedirect( '/static/stax/icons/paperback-stack.png' )
+

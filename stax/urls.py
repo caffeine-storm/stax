@@ -4,6 +4,7 @@ from stax import webapi
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^favicon.ico', 'stax.views.faviconRedirect' ),
     url(r'^stax/$', 'stax.views.frontpage'),
     url(r'^stax/render/stack.html', 'stax.views.renderStack' ),
     url(r'^stax/render/(?P<widget_name>[a-z0-9\.]+)', 'stax.views.render'),
