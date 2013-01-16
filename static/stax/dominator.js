@@ -291,11 +291,19 @@ function editNodeName( nd ) {
             nd.removeEventListener( "click", ret, false );
             var inp = nd.getElementsByTagName( 'input' )[0];
             inp.focus();
-            inp.addEventListener( 'blur', function(evt) {
+            var fn = function(evt) {
                 et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
                     nd.innerHTML = req.responseText;
                     nd.addEventListener( "click", editNodeName( nd ), false );
                 });
+            };
+            inp.addEventListener( 'blur', fn, false );
+            inp.addEventListener( 'keypress', function( evt ) {
+                // Enter is 13
+                var key = evt.keyCode;
+                if( key == 13 ) {
+                    inp.blur();
+                }
             }, false );
         });
     }
