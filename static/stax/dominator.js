@@ -290,15 +290,23 @@ function nodeDrop( nd ) {
     }
 }
 
-function getStackNodeID( nd ) {
-    var ctrls = nd.parentNode.getElementsByClassName( 'leaf-controls' )[0];
+function getID( nd, name ) {
+    var ctrls = nd.parentNode.getElementsByClassName( name )[0];
     return ctrls.getAttribute( 'stacknodeid' );
+}
+
+function getStackNodeID( nd ) {
+    return getID( nd, 'leaf-controls' );
+}
+
+function getStackBaseID( nd ) {
+    return getID( nd, 'stack-controls' );
 }
 
 function editNodeName( nd ) {
     var ret = undefined;
     ret = function( evt ) {
-        et.serverRender( "editnameinput.html", {'nodename':nd.innerHTML}, nd, function( x ) {
+        et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
             nd.removeEventListener( "click", ret, false );
             var inp = nd.getElementsByTagName( 'input' )[0];
             inp.focus();
@@ -306,6 +314,26 @@ function editNodeName( nd ) {
                 et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
                     nd.innerHTML = req.responseText;
                     nd.addEventListener( "click", editNodeName( nd ), false );
+                });
+            };
+            inp.addEventListener( 'blur', fn, false );
+            inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
+        });
+    }
+    return ret;
+}
+
+function editStackName( nd ) {
+    var ret = undefined;
+    ret = function( evt ) {
+        et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
+            nd.removeEventListener( "click", ret, false );
+            var inp = nd.getElementsByTagName( 'input' )[0];
+            inp.focus();
+            var fn = function(evt) {
+                et.phoneHome( 'rename', {'stackid': getStackBaseID( nd ), 'data':inp.value}, function(req) {
+                    nd.innerHTML = req.responseText;
+                    nd.addEventListener( "click", editStackName( nd ), false );
                 });
             };
             inp.addEventListener( 'blur', fn, false );
@@ -369,6 +397,12 @@ function registerCallbacks( rootNode ) {
         elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
         elem.addEventListener( "dragover", nodeDragOver( elem ), false );
         elem.addEventListener( "drop", nodeDrop( elem ), false );
+    }
+
+    elems = rootNode.getElementsByClassName( "stack-base-text" );
+    for( var i = 0; i < elems.length; ++i ) {
+        var elem = elems.item( i );
+        elem.addEventListener( "click", editStackName( elem ), false );
     }
 }
 
