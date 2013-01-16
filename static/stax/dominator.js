@@ -176,6 +176,12 @@ function createStack( evt ) {
         container.insertBefore( newstack, fc );
         var inp = newstack.getElementsByTagName( 'input' )[0];
         inp.addEventListener( 'blur', doCommitNewStack( inp.value, evt.target ) );
+        inp.addEventListener( 'keypress', function(evt) {
+            // Enter is 13
+            if( evt.keyCode == 13 ) {
+                inp.blur();
+            }
+        });
         inp.focus();
     };
 
@@ -261,6 +267,12 @@ function doPushNode( elem ) {
         }
 
         inp.addEventListener( 'blur', function(evt){ commitNewNode( stackid, getText, newlayer ); }, false );
+        inp.addEventListener( 'keypress', function(e) {
+            // Enter is 13
+            if( e.keyCode == 13 ) {
+                inp.blur();
+            }
+        });
         inp.focus();
     };
 
@@ -300,8 +312,7 @@ function editNodeName( nd ) {
             inp.addEventListener( 'blur', fn, false );
             inp.addEventListener( 'keypress', function( evt ) {
                 // Enter is 13
-                var key = evt.keyCode;
-                if( key == 13 ) {
+                if( evt.keyCode == 13 ) {
                     inp.blur();
                 }
             }, false );
