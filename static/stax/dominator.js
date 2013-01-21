@@ -154,25 +154,23 @@ function popNode( imgElem ) {
         return function(x){};
     }
 
-    return function( evt ) {
-        var fn = function( req ) {
-            parentLayer.removeChild( curLayer );
+    var fn = function( req ) {
+        parentLayer.removeChild( curLayer );
 
-            // If there are no stack-layer divs under parentLayer, then
-            // the li in parentLayer has changed from a stack-node to a stack
-            // leaf
-            if( findChildWithClassEx( "stack-layer", parentLayer ) == null ) {
-                var newLeaf = findChildWithClass( "stack-node", parentLayer );
-                if( newLeaf == null ) {
-                    // Must've been the last non-base node in the stack
-                    return;
-                }
-                newLeaf.setAttribute( "class", "stack-leaf" );
+        // If there are no stack-layer divs under parentLayer, then
+        // the li in parentLayer has changed from a stack-node to a stack
+        // leaf
+        if( findChildWithClassEx( "stack-layer", parentLayer ) == null ) {
+            var newLeaf = findChildWithClass( "stack-node", parentLayer );
+            if( newLeaf == null ) {
+                // Must've been the last non-base node in the stack
+                return;
             }
-        };
-
-        et.phoneHome( "pop", {'stackid': stackid}, fn );
+            newLeaf.setAttribute( "class", "stack-leaf" );
+        }
     };
+
+    et.phoneHome( "pop", {'stackid': stackid}, fn );
 }
 
 function createStack( evt ) {
@@ -345,13 +343,19 @@ function editStackName( nd ) {
 
 function registerCallbacks( rootNode ) {
     // Every element with class 'drop-node-button' needs onClick to invoke popNode
+    /*
     var elems = rootNode.getElementsByClassName( "drop-leaf-button" );
     for( var i = 0; i < elems.length; ++i ) {
         var elem = elems.item( i );
         elem.addEventListener( "click", popNode( elem ), false );
     }
+    */
 
-    elems = rootNode.getElementsByClassName( "drop-stack-button" );
+    $(rootNode).find(".drop-leaf-button").click(function() {
+        popNode( this );
+    });
+
+    var elems = rootNode.getElementsByClassName( "drop-stack-button" );
     for( var i = 0; i < elems.length; ++i ) {
         var elem = elems.item( i );
         elem.addEventListener( "click", dropStack( elem ), false );
