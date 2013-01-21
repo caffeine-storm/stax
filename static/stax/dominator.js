@@ -173,7 +173,7 @@ function popNode( imgElem ) {
     et.phoneHome( "pop", {'stackid': stackid}, fn );
 }
 
-function createStack( evt ) {
+function createStack( target ) {
     // TODO: Disable the create stack button
 
     var container = document.getElementById( "stack-display" );
@@ -182,7 +182,7 @@ function createStack( evt ) {
         var fc = container.firstChild;
         container.insertBefore( newstack, fc );
         var inp = newstack.getElementsByTagName( 'input' )[0];
-        inp.addEventListener( 'blur', doCommitNewStack( inp.value, evt.target ) );
+        inp.addEventListener( 'blur', doCommitNewStack( inp.value, target ) );
         inp.addEventListener( 'keypress', blurOnEnter( inp ) );
         inp.focus();
     };
@@ -351,21 +351,19 @@ function registerCallbacks( rootNode ) {
     }
     */
 
+    var elems;
+
     $(rootNode).find(".drop-leaf-button").click(function() {
         popNode( this );
     });
 
-    var elems = rootNode.getElementsByClassName( "drop-stack-button" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "click", dropStack( elem ), false );
-    }
+    $(rootNode).find( ".drop-stack-button" ).click(function() {
+        dropStack( this )();
+    });
 
-    elems = rootNode.getElementsByClassName( "create-stack-button" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "click", createStack, false );
-    }
+    $(rootNode).find( ".create-stack-button" ).click(function() {
+        createStack( this );
+    });
 
     elems = rootNode.getElementsByClassName( "node-maker" );
     for( var i = 0; i < elems.length; ++i ) {
