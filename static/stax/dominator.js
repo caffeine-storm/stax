@@ -191,16 +191,14 @@ function createStack( target ) {
 }
 
 function newNodeDragStart( evt ) {
-    evt.dataTransfer.effectAllowed = "copy";
-    evt.dataTransfer.setData( "text/plain", "push-node" );
+    evt.originalEvent.dataTransfer.effectAllowed = "copy";
+    evt.originalEvent.dataTransfer.setData( "text/plain", "push-node" );
 }
 
-function nodeDragOver( nd ) {
-    return function( evt ) {
-        if( evt.dataTransfer.types.contains( "text/plain" ) ) {
-            if( evt.dataTransfer.getData( "text/plain" ) == "push-node" ) {
-                evt.preventDefault(); // Mark this as a drop target
-            }
+function nodeDragOver( evt ) {
+    if( evt.originalEvent.dataTransfer.types.contains( "text/plain" ) ) {
+        if( evt.originalEvent.dataTransfer.getData( "text/plain" ) == "push-node" ) {
+            evt.preventDefault(); // Mark this as a drop target
         }
     }
 }
@@ -276,14 +274,12 @@ function doPushNode( elem ) {
     make_widget( "newnodelayer.html", {}, "div", { 'class': 'stack-layer' }, fn );
 }
 
-function nodeDrop( nd ) {
-    return function( evt ) {
-        if( evt.dataTransfer.types.contains( "text/plain" ) ) {
-            if( evt.dataTransfer.getData( "text/plain" ) == "push-node" ) {
-                evt.preventDefault(); // Mark this as a drop target
+function nodeDrop( evt ) {
+    if( evt.originalEvent.dataTransfer.types.contains( "text/plain" ) ) {
+        if( evt.originalEvent.dataTransfer.getData( "text/plain" ) == "push-node" ) {
+            evt.originalEvent.preventDefault(); // Mark this as a drop target
 
-                doPushNode( evt.target );
-            }
+            doPushNode( evt.target );
         }
     }
 }
@@ -304,7 +300,6 @@ function getStackBaseID( nd ) {
 function editNodeName( nd ) {
     et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
         $(nd).off( 'click' );
-        nd.removeEventListener( "click", ret, false );
         var inp = nd.getElementsByTagName( 'input' )[0];
         inp.focus();
         var fn = function(evt) {
@@ -354,39 +349,22 @@ function registerCallbacks( rootNode ) {
         createStack( this );
     });
 
-    elems = rootNode.getElementsByClassName( "node-maker" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "dragstart", newNodeDragStart, false );
-    }
-
-    elems = rootNode.getElementsByClassName( "stack-leaf" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
-        elem.addEventListener( "dragover", nodeDragOver( elem ), false );
-        elem.addEventListener( "drop", nodeDrop( elem ), false );
-    }
+    $(rootNode).find( ".node-maker" ).on( "dragstart", newNodeDragStart );
+    $(rootNode).find( ".stack-leaf" ).on( "dragenter", nodeDragOver );
+    $(rootNode).find( ".stack-leaf" ).on( "dragover", nodeDragOver );
+    $(rootNode).find( ".stack-leaf" ).on( "drop", nodeDrop );
 
     $(rootNode).find(".stack-leaf-text").click(function() {
         editNodeName( this );
     });
 
-    elems = rootNode.getElementsByClassName( "stack-node" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
-        elem.addEventListener( "dragover", nodeDragOver( elem ), false );
-        elem.addEventListener( "drop", nodeDrop( elem ), false );
-    }
+    $(rootNode).find( ".stack-node" ).on( "dragenter", nodeDragOver );
+    $(rootNode).find( ".stack-node" ).on( "dragover", nodeDragOver );
+    $(rootNode).find( ".stack-node" ).on( "drop", nodeDrop );
 
-    elems = rootNode.getElementsByClassName( "stack-base" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "dragenter", nodeDragOver( elem ), false );
-        elem.addEventListener( "dragover", nodeDragOver( elem ), false );
-        elem.addEventListener( "drop", nodeDrop( elem ), false );
-    }
+    $(rootNode).find( ".stack-base" ).on( "dragenter", nodeDragOver );
+    $(rootNode).find( ".stack-base" ).on( "dragover", nodeDragOver );
+    $(rootNode).find( ".stack-base" ).on( "drop", nodeDrop );
 
     elems = rootNode.getElementsByClassName( "stack-base-text" );
     for( var i = 0; i < elems.length; ++i ) {
