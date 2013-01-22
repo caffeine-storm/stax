@@ -302,23 +302,20 @@ function getStackBaseID( nd ) {
 }
 
 function editNodeName( nd ) {
-    var ret = undefined;
-    ret = function( evt ) {
-        et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
-            nd.removeEventListener( "click", ret, false );
-            var inp = nd.getElementsByTagName( 'input' )[0];
-            inp.focus();
-            var fn = function(evt) {
-                et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
-                    nd.innerHTML = req.responseText;
-                    nd.addEventListener( "click", editNodeName( nd ), false );
-                });
-            };
-            inp.addEventListener( 'blur', fn, false );
-            inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
-        });
-    }
-    return ret;
+    et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
+        $(nd).off( 'click' );
+        nd.removeEventListener( "click", ret, false );
+        var inp = nd.getElementsByTagName( 'input' )[0];
+        inp.focus();
+        var fn = function(evt) {
+            et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
+                nd.innerHTML = req.responseText;
+                nd.addEventListener( "click", function( e ) { editNodeName( e.target ); }, false );
+            });
+        };
+        inp.addEventListener( 'blur', fn, false );
+        inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
+    });
 }
 
 function editStackName( nd ) {
@@ -342,14 +339,6 @@ function editStackName( nd ) {
 }
 
 function registerCallbacks( rootNode ) {
-    // Every element with class 'drop-node-button' needs onClick to invoke popNode
-    /*
-    var elems = rootNode.getElementsByClassName( "drop-leaf-button" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "click", popNode( elem ), false );
-    }
-    */
 
     var elems;
 
@@ -379,11 +368,9 @@ function registerCallbacks( rootNode ) {
         elem.addEventListener( "drop", nodeDrop( elem ), false );
     }
 
-    elems = rootNode.getElementsByClassName( "stack-leaf-text" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "click", editNodeName( elem ), false );
-    }
+    $(rootNode).find(".stack-leaf-text").click(function() {
+        editNodeName( this );
+    });
 
     elems = rootNode.getElementsByClassName( "stack-node" );
     for( var i = 0; i < elems.length; ++i ) {
