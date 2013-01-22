@@ -331,8 +331,6 @@ function editStackName( nd ) {
 
 function registerCallbacks( rootNode ) {
 
-    var elems;
-
     $(rootNode).find(".drop-leaf-button").click(function() {
         popNode( this );
     });
@@ -346,17 +344,10 @@ function registerCallbacks( rootNode ) {
     });
 
     $(rootNode).find( ".node-maker" ).on( "dragstart", newNodeDragStart );
-    $(rootNode).find( ".stack-leaf" ).on( "dragenter", nodeDragOver );
-    $(rootNode).find( ".stack-leaf" ).on( "dragover", nodeDragOver );
-    $(rootNode).find( ".stack-leaf" ).on( "drop", nodeDrop );
 
-    $(rootNode).find( ".stack-node" ).on( "dragenter", nodeDragOver );
-    $(rootNode).find( ".stack-node" ).on( "dragover", nodeDragOver );
-    $(rootNode).find( ".stack-node" ).on( "drop", nodeDrop );
-
-    $(rootNode).find( ".stack-base" ).on( "dragenter", nodeDragOver );
-    $(rootNode).find( ".stack-base" ).on( "dragover", nodeDragOver );
-    $(rootNode).find( ".stack-base" ).on( "drop", nodeDrop );
+    $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "dragenter", nodeDragOver );
+    $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "dragover", nodeDragOver );
+    $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "drop", nodeDrop );
 
     $(rootNode).find(".stack-leaf-text").click(function() {
         editNodeName( this );
