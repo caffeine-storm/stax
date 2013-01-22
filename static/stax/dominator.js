@@ -314,23 +314,19 @@ function editNodeName( nd ) {
 }
 
 function editStackName( nd ) {
-    var ret = undefined;
-    ret = function( evt ) {
-        et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
-            nd.removeEventListener( "click", ret, false );
-            var inp = nd.getElementsByTagName( 'input' )[0];
-            inp.focus();
-            var fn = function(evt) {
-                et.phoneHome( 'rename', {'stackid': getStackBaseID( nd ), 'data':inp.value}, function(req) {
-                    nd.innerHTML = req.responseText;
-                    nd.addEventListener( "click", editStackName( nd ), false );
-                });
-            };
-            inp.addEventListener( 'blur', fn, false );
-            inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
-        });
-    }
-    return ret;
+    et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
+        $(nd).off( 'click' );
+        var inp = nd.getElementsByTagName( 'input' )[0];
+        inp.focus();
+        var fn = function(evt) {
+            et.phoneHome( 'rename', {'stackid': getStackBaseID( nd ), 'data':inp.value}, function(req) {
+                nd.innerHTML = req.responseText;
+                nd.addEventListener( "click", function( e ) { editStackName( e.target ); }, false );
+            });
+        };
+        inp.addEventListener( 'blur', fn, false );
+        inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
+    });
 }
 
 function registerCallbacks( rootNode ) {
@@ -354,10 +350,6 @@ function registerCallbacks( rootNode ) {
     $(rootNode).find( ".stack-leaf" ).on( "dragover", nodeDragOver );
     $(rootNode).find( ".stack-leaf" ).on( "drop", nodeDrop );
 
-    $(rootNode).find(".stack-leaf-text").click(function() {
-        editNodeName( this );
-    });
-
     $(rootNode).find( ".stack-node" ).on( "dragenter", nodeDragOver );
     $(rootNode).find( ".stack-node" ).on( "dragover", nodeDragOver );
     $(rootNode).find( ".stack-node" ).on( "drop", nodeDrop );
@@ -366,11 +358,13 @@ function registerCallbacks( rootNode ) {
     $(rootNode).find( ".stack-base" ).on( "dragover", nodeDragOver );
     $(rootNode).find( ".stack-base" ).on( "drop", nodeDrop );
 
-    elems = rootNode.getElementsByClassName( "stack-base-text" );
-    for( var i = 0; i < elems.length; ++i ) {
-        var elem = elems.item( i );
-        elem.addEventListener( "click", editStackName( elem ), false );
-    }
+    $(rootNode).find(".stack-leaf-text").click(function() {
+        editNodeName( this );
+    });
+
+    $(rootNode).find(".stack-base-text").click(function() {
+        editStackName( this );
+    });
 }
 
 function onLoad() {
