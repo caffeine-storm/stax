@@ -215,7 +215,7 @@ function doPushNode( elem ) {
             try {
                 leaf = findParentWithClass( ".stack-base", elem );
             } catch(Exception) {
-                throw new Error( "couldn't find a target node above " + elem );
+                throw( "couldn't find a target node above " + elem );
             }
         }
     }
@@ -226,7 +226,7 @@ function doPushNode( elem ) {
         controls = findChildWithClass( ".stack-controls", leaf );
     }
     if( controls == null ) {
-        throw new Error( "Couldn't find the control panel" );
+        throw( "Couldn't find the control panel" );
     }
     var stackid = controls.getAttribute( "stacknodeid" );
 
