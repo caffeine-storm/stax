@@ -79,7 +79,7 @@ function doCommitNewStack( rejectThisName, createStackButton ) { return function
     et.phoneHome( "createstack", {'name':targName}, fn );
 }}
 
-function findParentWithClass( className, elem ) {
+function findParent( className, elem ) {
     var ret = $(elem).closest( className );
     if( ret.length != 1 ) {
         throw( "Found " + ret.length + " matches in fineParentWithClass!" );
@@ -102,18 +102,11 @@ function findChildWithClassEx( className, root ) {
 }
 
 function dropStack( imgElem ) {
-    var targ = findParentWithClass( ".stack-controls", imgElem );
-    var stackid = targ.getAttribute( "stacknodeid" );
-    var ourList = findParentWithClass( ".stack-list", targ );
-    var theStackDisplay = ourList.parentNode;
-
-    if( theStackDisplay != document.getElementById( "stack-display" ) ) {
-        alert( "Tried to (generate a) drop stack that was not a grand-child of the stack-display" );
-        return function(x){}
-    }
+    var stackid = $(imgElem).closest( "div.stack-controls" ).attr( "stacknodeid" );
+    var ourList = findParent( "ul.stack-list", imgElem );
+    var theStackDisplay = $('#stack-display').get(0);
 
     return function( evt ) {
-
         var fn = function( req ) {
             theStackDisplay.removeChild( ourList );
         }
@@ -123,9 +116,9 @@ function dropStack( imgElem ) {
 }
 
 function popNode( imgElem ) {
-    var nodeCtrls = findParentWithClass( ".leaf-controls", imgElem );
+    var nodeCtrls = findParent( ".leaf-controls", imgElem );
     var stackid = nodeCtrls.getAttribute( "stacknodeid" );
-    var curLayer = findParentWithClass( ".stack-layer", nodeCtrls );
+    var curLayer = findParent( ".stack-layer", nodeCtrls );
     var parentLayer = curLayer.parentNode;
 
     if( parentLayer.getAttribute( "class" ) != "stack-layer" ) {
@@ -207,20 +200,20 @@ function commitNewNode( parentId, getText, layer ) {
 function doPushNode( elem ) {
     var leaf = null;
     try {
-        leaf = findParentWithClass( ".stack-leaf", elem );
+        leaf = findParent( ".stack-leaf", elem );
     } catch( Exception ) {
         try {
-            leaf = findParentWithClass( ".stack-node", elem );
+            leaf = findParent( ".stack-node", elem );
         } catch (Exception) {
             try {
-                leaf = findParentWithClass( ".stack-base", elem );
+                leaf = findParent( ".stack-base", elem );
             } catch(Exception) {
                 throw( "couldn't find a target node above " + elem );
             }
         }
     }
 
-    var container = findParentWithClass( ".stack-layer", leaf );
+    var container = findParent( ".stack-layer", leaf );
     var controls = findChildWithClass( ".leaf-controls", leaf );
     if( controls == null ) {
         controls = findChildWithClass( ".stack-controls", leaf );
