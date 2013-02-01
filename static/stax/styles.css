@@ -22,12 +22,12 @@
 .node-maker li, .stack-node, .stack-leaf {
     padding: 5px;
     border: solid 2px black;
-    background-color: #5487FF;
+    background-color: #00b6fe;
     border-bottom: hidden;
 }
 
 .stack-base {
-    background-color: #DEDEDE;
+    background-color: #dc3a00;
     padding: 7px;
 }
 
