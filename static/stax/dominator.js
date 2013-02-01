@@ -324,6 +324,10 @@ function registerCallbacks( rootNode ) {
         editNodeName( this );
     });
 
+    $(rootNode).find(".stack-node-text").click(function() {
+        editNodeName( this );
+    });
+
     $(rootNode).find(".stack-base-text").click(function() {
         editStackName( this );
     });
