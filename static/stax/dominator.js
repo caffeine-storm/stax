@@ -271,16 +271,18 @@ function getStackBaseID( nd ) {
 function editNodeName( nd ) {
     et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
         $(nd).off( 'click' );
-        var inp = nd.getElementsByTagName( 'input' )[0];
+        var inp = $(nd).find( 'input' ).get(0);
         inp.focus();
         var fn = function(evt) {
             et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
                 nd.innerHTML = req.responseText;
-                nd.addEventListener( "click", function( e ) { editNodeName( e.target ); }, false );
+                $(nd).click(function () {
+                    editNodeName( this );
+                });
             });
         };
-        inp.addEventListener( 'blur', fn, false );
-        inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
+        $(inp).blur( fn );
+        $(inp).keypress( blurOnEnter( inp ) );
     });
 }
 
