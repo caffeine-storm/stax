@@ -269,11 +269,20 @@ function getStackBaseID( nd ) {
 }
 
 function editNodeName( nd ) {
+    var oldValue = nd.innerHTML;
     et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
         $(nd).off( 'click' );
         var inp = $(nd).find( 'input' ).get(0);
         inp.focus();
         var fn = function(evt) {
+            if( inp.value == oldValue ) {
+                // Avoid the call back to the server if the name didn't change
+                nd.innerHTML = oldValue;
+                $(nd).click( function() {
+                    editNodeName( this );
+                });
+                return;
+            }
             et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
                 nd.innerHTML = req.responseText;
                 $(nd).click(function () {
