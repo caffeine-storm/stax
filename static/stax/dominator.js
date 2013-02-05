@@ -44,7 +44,7 @@ function make_widget( name, ctx, elem, attrs, cb ) {
     et.serverRender( name, ctx, ret, cb );
 }
 
-function doCommitNewStack( rejectThisName, createStackButton ) { return function( evt ) {
+function doCommitNewStack( rejectThisName, createStackButton ) {
     var targ = document.getElementById( "newstack" );
     var targName = targ.getElementsByTagName( "input" )[0].value;
 
@@ -77,7 +77,7 @@ function doCommitNewStack( rejectThisName, createStackButton ) { return function
     }
 
     et.phoneHome( "createstack", {'name':targName}, fn );
-}}
+}
 
 function findParent( className, elem ) {
     var ret = $(elem).closest( className );
@@ -146,17 +146,16 @@ function popNode( imgElem ) {
 }
 
 function createStack( target ) {
-    // TODO: Disable the create stack button
-
-    var container = document.getElementById( "stack-display" );
+    var container = $("#stack-display").get(0);
 
     var fn = function( newstack ) {
-        var fc = container.firstChild;
-        container.insertBefore( newstack, fc );
-        var inp = newstack.getElementsByTagName( 'input' )[0];
-        inp.addEventListener( 'blur', doCommitNewStack( inp.value, target ) );
-        inp.addEventListener( 'keypress', blurOnEnter( inp ) );
-        inp.focus();
+        $(container).prepend( newstack );
+        var inp = $(newstack).find('input');
+        inp.blur( function() {
+            doCommitNewStack( inp.value, target );
+        });
+        inp.keypress( blurOnEnter( inp ) );
+        inp.select();
     };
 
     make_widget( "newstack.html", {}, "ul", { 'id':'newstack', 'class':'stack-list' }, fn );
