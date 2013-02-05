@@ -255,17 +255,18 @@ function nodeDrop( evt ) {
     }
 }
 
-function getID( nd, name ) {
-    var ctrls = nd.parentNode.getElementsByClassName( name )[0];
+function getNodeID( nd ) {
+    var classname = null;
+    if( $(nd).hasClass( "stack-base-text" ) ) {
+        classname = '.stack-controls';
+    } else if( $(nd).hasClass( "stack-node-text stack-leaf-text" ) ) {
+        classname = ".leaf-controls";
+    } else {
+        throw( "getNodeID couldn't find an appropriate class on 'nd'" );
+    }
+
+    var ctrls = $(nd).parent().find( classname ).get(0);
     return ctrls.getAttribute( 'stacknodeid' );
-}
-
-function getStackNodeID( nd ) {
-    return getID( nd, 'leaf-controls' );
-}
-
-function getStackBaseID( nd ) {
-    return getID( nd, 'stack-controls' );
 }
 
 function editNodeName( nd ) {
@@ -277,13 +278,13 @@ function editNodeName( nd ) {
         var fn = function(evt) {
             if( inp.value == oldValue ) {
                 // Avoid the call back to the server if the name didn't change
-                nd.innerHTML = oldValue;
+                $(nd).html( oldValue );
                 $(nd).click( function() {
                     editNodeName( this );
                 });
                 return;
             }
-            et.phoneHome( 'rename', {'stackid': getStackNodeID( nd ), 'data':inp.value}, function(req) {
+            et.phoneHome( 'rename', {'stackid': getNodeID( nd ), 'data':inp.value}, function(req) {
                 nd.innerHTML = req.responseText;
                 $(nd).click(function () {
                     editNodeName( this );
@@ -292,22 +293,6 @@ function editNodeName( nd ) {
         };
         $(inp).blur( fn );
         $(inp).keypress( blurOnEnter( inp ) );
-    });
-}
-
-function editStackName( nd ) {
-    et.serverRender( "editnameinput.html", {'textval':nd.innerHTML}, nd, function( x ) {
-        $(nd).off( 'click' );
-        var inp = nd.getElementsByTagName( 'input' )[0];
-        inp.focus();
-        var fn = function(evt) {
-            et.phoneHome( 'rename', {'stackid': getStackBaseID( nd ), 'data':inp.value}, function(req) {
-                nd.innerHTML = req.responseText;
-                nd.addEventListener( "click", function( e ) { editStackName( e.target ); }, false );
-            });
-        };
-        inp.addEventListener( 'blur', fn, false );
-        inp.addEventListener( 'keypress', blurOnEnter( inp ), false );
     });
 }
 
@@ -331,16 +316,8 @@ function registerCallbacks( rootNode ) {
     $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "dragover", nodeDragOver );
     $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "drop", nodeDrop );
 
-    $(rootNode).find(".stack-leaf-text").click(function() {
+    $(rootNode).find(".stack-leaf-text, .stack-node-text, .stack-base-text").click(function() {
         editNodeName( this );
-    });
-
-    $(rootNode).find(".stack-node-text").click(function() {
-        editNodeName( this );
-    });
-
-    $(rootNode).find(".stack-base-text").click(function() {
-        editStackName( this );
     });
 }
 
