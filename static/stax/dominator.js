@@ -258,7 +258,7 @@ function getNodeID( nd ) {
     var classname = null;
     if( $(nd).hasClass( "stack-base-text" ) ) {
         classname = '.stack-controls';
-    } else if( $(nd).hasClass( "stack-node-text stack-leaf-text" ) ) {
+    } else if( $(nd).hasClass( "stack-node-text" ) || $(nd).hasClass( "stack-leaf-text" ) ) {
         classname = ".leaf-controls";
     } else {
         throw( "getNodeID couldn't find an appropriate class on 'nd'" );
