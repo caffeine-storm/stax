@@ -72,6 +72,11 @@
     cursor: pointer;
 }
 
+.new-stack-controls {
+    display: inline-block;
+    cursor: pointer;
+}
+
 .stack-controls:hover, .leaf-controls:hover {
     visibility: visible;
 }

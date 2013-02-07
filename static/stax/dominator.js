@@ -149,10 +149,14 @@ function createStack( target ) {
     var container = $("#stack-display").get(0);
 
     var fn = function( newstack ) {
+        $(newstack).find('.drop-stack-button').click( function() {
+            $(newstack).remove();
+        });
         $(container).prepend( newstack );
         var inp = $(newstack).find('input');
+        var oldValue = inp.get(0).value;
         inp.blur( function() {
-            doCommitNewStack( inp.value, target );
+            doCommitNewStack( oldValue, target );
         });
         inp.keypress( blurOnEnter( inp ) );
         inp.select();
