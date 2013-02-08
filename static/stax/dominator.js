@@ -199,47 +199,38 @@ function commitNewNode( parentId, getText, layer ) {
 }
 
 function doPushNode( elem ) {
-    var leaf = null;
-    try {
-        leaf = findParent( ".stack-leaf", elem );
-    } catch( Exception ) {
-        try {
-            leaf = findParent( ".stack-node", elem );
-        } catch (Exception) {
-            try {
-                leaf = findParent( ".stack-base", elem );
-            } catch(Exception) {
-                throw( "couldn't find a target node above " + elem );
-            }
-        }
+    var leaf = elem.closest(".stack-leaf, .stack-node, .stack-base");
+    if( leaf.length == 0 ) {
+        throw( "couldn't find a target node above " + elem.get(0) );
     }
 
-    var container = findParent( ".stack-layer", leaf );
-    var controls = findChildWithClass( ".leaf-controls", leaf );
-    if( controls == null ) {
-        controls = findChildWithClass( ".stack-controls", leaf );
-    }
-    if( controls == null ) {
+    var container = leaf.closest(".stack-layer");
+    var controls = leaf.find(".leaf-controls, .stack-controls");
+    if( controls.length == 0 ) {
         throw( "Couldn't find the control panel" );
     }
-    var stackid = controls.getAttribute( "stacknodeid" );
+    var stackid = controls.attr( "stacknodeid" );
 
     var fn = function( newlayer ) {
         // Insert the new layer just before the last child element (ie leaf)
-        container.insertBefore( newlayer, leaf );
-        var inp = newlayer.getElementsByTagName( 'input' )[0];
+        // container.insertBefore( newlayer, leaf );
+        $(newlayer).insertBefore( leaf );
+        var inp = $(newlayer).find( 'input' );
 
         // If the parent was a leaf, it isn't anymore...
-        if( leaf.getAttribute( "class" ) == "stack-leaf" ) {
-            leaf.setAttribute( "class", "stack-node" );
+        if( leaf.hasClass("stack-leaf") ) {
+            leaf.removeClass("stack-leaf");
+            leaf.addClass("stack-node");
         }
 
         function getText() {
-            return inp.value;
+            return inp.val();
         }
 
-        inp.addEventListener( 'blur', function(evt){ commitNewNode( stackid, getText, newlayer ); }, false );
-        inp.addEventListener( 'keypress', blurOnEnter( inp ) );
+        inp.blur( function(){
+            commitNewNode( stackid, getText, newlayer );
+        });
+        inp.keypress( blurOnEnter( inp.get(0) ) );
         inp.focus();
     };
 
@@ -251,7 +242,7 @@ function nodeDrop( evt ) {
         if( evt.originalEvent.dataTransfer.getData( "text/plain" ) == "push-node" ) {
             evt.originalEvent.preventDefault(); // Mark this as a drop target
 
-            doPushNode( evt.target );
+            doPushNode( $(evt.target) );
         }
     }
 }
