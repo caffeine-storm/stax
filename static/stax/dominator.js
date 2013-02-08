@@ -115,28 +115,28 @@ function dropStack( imgElem ) {
 }
 
 function popNode( imgElem ) {
-    var nodeCtrls = findParent( ".leaf-controls", imgElem );
-    var stackid = nodeCtrls.getAttribute( "stacknodeid" );
-    var curLayer = findParent( ".stack-layer", nodeCtrls );
-    var parentLayer = curLayer.parentNode;
+    var nodeCtrls = $(imgElem).closest(".leaf-controls");
+    var stackid = nodeCtrls.attr("stacknodeid");
+    var curLayer = nodeCtrls.closest(".stack-layer");
+    var parentLayer = curLayer.parent();
 
-    if( ! $(parentLayer).hasClass( "stack-layer" ) ) {
+    if( ! parentLayer.hasClass( "stack-layer" ) ) {
         throw( "Error: expecting stack-layer as parent!!!" );
     }
 
     var fn = function( req ) {
-        parentLayer.removeChild( curLayer );
+        curLayer.remove();
 
         // If there are no stack-layer divs under parentLayer, then
         // the li in parentLayer has changed from a stack-node to a stack
         // leaf
-        if( $(parentLayer).children(".stack-layer").length == 0 ) {
-            var newLeaf = findChildWithClass( ".stack-node", parentLayer );
-            if( newLeaf == null ) {
+        if( parentLayer.children(".stack-layer").length == 0 ) {
+            var newLeaf = parentLayer.find(".stack-node");
+            if( newLeaf.length == 0 ) {
                 // Must've been the last non-base node in the stack
                 return;
             }
-            newLeaf.setAttribute( "class", "stack-leaf" );
+            newLeaf.attr( "class", "stack-leaf" );
         }
     };
 
