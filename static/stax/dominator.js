@@ -1,29 +1,6 @@
 // dom manipulation
 // TODO: helpers for finding-by-stack so element ids don't have all the dashes
 
-function doDeSelect( itemID, oldVal ) {
-    var e = document.getElementById( itemID );
-    var d = e.parentNode;
-    var textVal = e.value;
-
-    var f = document.createElement( "span" );
-    f.setAttribute( "class", "stack-node-text" );
-    f.setAttribute( "onclick", "doSelect('" + itemID + "')" );
-    f.textContent = textVal;
-
-    d.replaceChild( f, e );
-    f.id = e.id;
-
-    // Send AJAX update for node value
-    if( textVal != unescape( oldVal ) ) {
-        var parts = itemID.split( "-" );
-        var nodeOffset = parts.pop();
-        var stackID = parts.pop();
-
-        et.phoneHome( "rename", {stackid:stackID, nodeoffset:nodeOffset, data:textVal}, function(req) {} );
-    }
-}
-
 function blurOnEnter( elem ) {
     return function( evt ) {
         // Enter is 13
@@ -45,8 +22,8 @@ function make_widget( name, ctx, elem, attrs, cb ) {
 }
 
 function doCommitNewStack( rejectThisName, createStackButton ) {
-    var targ = document.getElementById( "newstack" );
-    var targName = targ.getElementsByTagName( "input" )[0].value;
+    var targ = $("#newstack");
+    var targName = targ.find( "input" ).val();
 
     if( util.wsTrim( targName ) == rejectThisName ) {
         return;
@@ -55,20 +32,21 @@ function doCommitNewStack( rejectThisName, createStackButton ) {
     var fn = function( req ) {
         var xmlDoc = req.responseXML;
 
-        var x = xmlDoc.getElementsByTagName( "stack" )[0];
-        var stackid = x.getElementsByTagName( "stackid" )[0].textContent;
+        // var x = $(xmlDoc).find("stack");
+        // var stackid = x.find( "stackid" ).get(0).textContent;
+        var stackid = $(xmlDoc).find("stack > stackid").get(0).textContent;
 
         if( stackid == null ) {
             throw( "couldn't parse xml doc!" );
         }
 
         var fnn = function( newstack ) {
-            var sd = targ.parentNode;
-            sd.removeChild( targ );
+            var sd = targ.parent();
+            targ.remove();
 
             // TODO: once the create stack button is getting disabled, re-enable it here
 
-            sd.appendChild( newstack );
+            sd.append( newstack );
             registerCallbacks( newstack );
         }
 
@@ -84,20 +62,6 @@ function findParent( className, elem ) {
         throw( "Found " + ret.length + " matches in fineParentWithClass!" );
     }
     return ret.get(0);
-}
-
-function findChildWithClass( className, elem ) {
-    var ret = $(elem).find( className );
-    if( ret.length == 0 ) return null;
-    if( ret.length == 1 ) return ret.get(0);
-    throw( "findChildWithClass: Mulitple children found for '" + className + "'" );
-}
-
-function findChildWithClassEx( className, root ) {
-    var ret = $(root.childNodes).find( className );
-    if( ret.length == 0 ) return null
-    if( ret.length == 1 ) return ret.get(0);
-    throw( "findChildWithClassEx: Multiple children found for '" + className + "'" );
 }
 
 function dropStack( imgElem ) {
@@ -257,8 +221,8 @@ function getNodeID( nd ) {
         throw( "getNodeID couldn't find an appropriate class on 'nd'" );
     }
 
-    var ctrls = $(nd).parent().find( classname ).get(0);
-    return ctrls.getAttribute( 'stacknodeid' );
+    var ctrls = $(nd).parent().find( classname );
+    return ctrls.attr( 'stacknodeid' );
 }
 
 function editNodeName( nd ) {
