@@ -59,8 +59,7 @@ function doCommitNewStack( rejectThisName, createStackButton ) {
         var stackid = x.getElementsByTagName( "stackid" )[0].textContent;
 
         if( stackid == null ) {
-            alert( "couldn't parse xml doc!" );
-            return;
+            throw( "couldn't parse xml doc!" );
         }
 
         var fnn = function( newstack ) {
@@ -91,14 +90,14 @@ function findChildWithClass( className, elem ) {
     var ret = $(elem).find( className );
     if( ret.length == 0 ) return null;
     if( ret.length == 1 ) return ret.get(0);
-    throw( "Mulitple children found for '" + className + "'" );
+    throw( "findChildWithClass: Mulitple children found for '" + className + "'" );
 }
 
 function findChildWithClassEx( className, root ) {
     var ret = $(root.childNodes).find( className );
     if( ret.length == 0 ) return null
     if( ret.length == 1 ) return ret.get(0);
-    throw( "ex: Multiple children found for '" + className + "'" );
+    throw( "findChildWithClassEx: Multiple children found for '" + className + "'" );
 }
 
 function dropStack( imgElem ) {
@@ -121,9 +120,8 @@ function popNode( imgElem ) {
     var curLayer = findParent( ".stack-layer", nodeCtrls );
     var parentLayer = curLayer.parentNode;
 
-    if( parentLayer.getAttribute( "class" ) != "stack-layer" ) {
-        alert( "Error: expecting stack-layer as parent!!!" );
-        return function(x){};
+    if( ! $(parentLayer).hasClass( "stack-layer" ) ) {
+        throw( "Error: expecting stack-layer as parent!!!" );
     }
 
     var fn = function( req ) {
@@ -132,7 +130,7 @@ function popNode( imgElem ) {
         // If there are no stack-layer divs under parentLayer, then
         // the li in parentLayer has changed from a stack-node to a stack
         // leaf
-        if( findChildWithClassEx( ".stack-layer", parentLayer ) == null ) {
+        if( $(parentLayer).children(".stack-layer").length == 0 ) {
             var newLeaf = findChildWithClass( ".stack-node", parentLayer );
             if( newLeaf == null ) {
                 // Must've been the last non-base node in the stack
