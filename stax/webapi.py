@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from stax import api
+import json
 
 def restrictMethod(m):
     def wrapper( fn ):
@@ -11,9 +12,22 @@ def restrictMethod(m):
         return foo
     return wrapper
 
+def get_args( req, names ):
+    def do_get_args( mp, nms ):
+        head = mp[nms[0]]
+        if len( nms ) == 1:
+            return (head,)
+        tail = do_get_args( mp, nms[1:] )
+        return (head, tail)
+    try:
+        args = json.loads( req.readline() )
+        return do_get_args( args, names )
+    except ValueError as e:
+        raise Http404()
+
 @restrictMethod( "POST" )
 def doCreateStack( req ):
-    newName = req.POST['name']
+    (newName,) = get_args( req, ['name'] )
 
     s = api.createStack( newName )
 
@@ -26,19 +40,20 @@ def doCreateStack( req ):
 
 @restrictMethod( "POST" )
 def doDropStack( req ):
-    theid = req.POST['stackid']
+    (theid,) = get_args( req, ['stackid'] )
 
     try:
         api.dropStack( theid )
     except api.StaxAPIException as e:
-        return HttpResponse( str( e ), status=409 )
+        return HttpResponse( str( e ), status=404 )
 
     return HttpResponse()
 
 @restrictMethod( "POST" )
 def doPush( req ):
-    stackID = req.POST["id"]
-    entryVal = req.POST["item"]
+    # stackID = req.POST["id"]
+    # entryVal = req.POST["item"]
+    (stackID,(entryVal,)) = get_args( req, ['id', 'item'] )
 
     try:
         newnodeid = api.push( stackID, entryVal )
@@ -49,19 +64,21 @@ def doPush( req ):
 
 @restrictMethod( "POST" )
 def doPop( req ):
-    stackID = req.POST["stackid"]
+    # stackID = req.POST["stackid"]
+    (stackID,) = get_args( req, ["stackid"] )
 
     try:
         api.pop( stackID )
     except api.StaxAPIException as e:
-        return HttpResponse( str( e ), status=409 )
+        raise Http404()
 
     return HttpResponse()
 
 @restrictMethod( "POST" )
 def doRename( req ):
-    stackID = req.POST["stackid"]
-    newName = req.POST["data"]
+    # stackID = req.POST["stackid"]
+    # newName = req.POST["data"]
+    (stackID,(newName,)) = get_args( req, ["stackid", "data"] )
 
     api.rename( stackID, newName )
 

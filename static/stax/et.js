@@ -2,14 +2,23 @@
 
 var etprivate = {
     // ctx is a map of arg-name to arg-val
-    encode_args : function( ctx ) {
+    body_encode_args : function( ctx ) {
         ret = [];
         for( var nm in ctx ) {
             if( ctx.hasOwnProperty( nm ) ) {
-                ret.push( escape( nm ) + "=" + escape( ctx[nm] ) );
+                ret.push( '"' + escape( nm ) + '":"' + escape( ctx[nm] ) + '"' );
             }
         }
-        return ret.join('&');
+        return '{' + ret.join(',') + '}';
+    },
+    url_encode_args : function( ctx ) {
+        ret = [];
+        for( var nm in ctx ) {
+            if( ctx.hasOwnProperty( nm ) ) {
+                ret.push( escape( nm ) + '=' + escape( ctx[nm] ) );
+            }
+        }
+        return ret.join( '&' );
     }
 };
 
@@ -28,9 +37,9 @@ var et = {
         }
 
         req.open( "POST", "/stax/ajax/" + api, true );
-        req.setRequestHeader( "ContentType", "application/x-www-form-urlencoded" );
+        req.setRequestHeader( "ContentType", "application/json" );
         req.setRequestHeader( "X-CSRFToken", util.getCookie('csrftoken') );
-        var msgBody = etprivate.encode_args( args );
+        var msgBody = etprivate.body_encode_args( args );
         // alert( "Sending message with '" + msgBody + "'" );
         req.send( msgBody );
     },
@@ -52,7 +61,7 @@ var et = {
 
         var ctxurl = '';
         if( Object.keys( ctx ).length > 0 ) {
-            ctxurl = '?' + etprivate.encode_args( ctx );
+            ctxurl = '?' + etprivate.url_encode_args( ctx );
         }
 
         req.open( "GET", "/stax/render/" + widgetname + ctxurl, true );
