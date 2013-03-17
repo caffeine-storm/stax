@@ -52,7 +52,17 @@ def pop( nodeId ):
     stk.delete()
 
 def rename( stackId, newName ):
-    st = get_object_or_404( StackNode, pk=stackId );
+    st = get_object_or_404( StackNode, pk=stackId )
     st.name = newName
     st.save()
+
+def stackToJSON( stackId ):
+	import json
+	st = get_object_or_404( StackNode, pk=stackId )
+	mp = {}
+	mp['id'] = str( stackId )
+	mp['name'] = str( st.name )
+	mp['desc'] = str( st.desc )
+	mp['tp'] = str( st.tp )
+	print json.dumps( mp )
 
