@@ -13,6 +13,7 @@ def restrictMethod(m):
     return wrapper
 
 def get_args( req, names ):
+    import urllib
     def do_get_args( mp, nms ):
         head = mp[nms[0]]
         if len( nms ) == 1:
@@ -21,6 +22,8 @@ def get_args( req, names ):
         return (head, tail)
     try:
         args = json.loads( req.readline() )
+        for k in args:
+            args[k] = urllib.unquote( args[k] )
         return do_get_args( args, names )
     except ValueError as e:
         raise Http404()
