@@ -56,7 +56,7 @@ def rename( stackId, newName ):
     st.name = newName
     st.save()
 
-def stackToJSON( stackId ):
+def stackNodeToJSON( stackId ):
 	import json
 	st = get_object_or_404( StackNode, pk=stackId )
 	mp = {}
