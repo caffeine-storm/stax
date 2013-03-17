@@ -3,7 +3,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import Http404, HttpResponse
 from django.template import RequestContext
 from stax.models import StackNode, Dependency
-import stax.webapi
 
 def stackToMap( st ):
     ret = {}
@@ -103,6 +102,7 @@ def renderStack( req ):
 
 # Do a webapi.doPush and return a response with HTML for the new node
 def doPushAndRender( req ):
+    import stax.webapi
     resp = stax.webapi.doPush( req )
     theid = int( resp.content )
     return render_to_response(
