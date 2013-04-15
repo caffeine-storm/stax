@@ -1,0 +1,12 @@
+source $HOME/.screenrc
+
+split -v
+screen -t django 1 /bin/bash -c "python manage.py runserver; exec bash"
+
+split
+focus down
+screen 2
+focus down
+screen -t vim 0
+redisplay
+
