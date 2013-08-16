@@ -1,5 +1,7 @@
 source $HOME/.screenrc
 
+sessionname stax
+
 split -v
 screen -t django 1 /bin/bash -c "python manage.py runserver; exec bash"
 
