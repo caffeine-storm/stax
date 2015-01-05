@@ -1,5 +1,8 @@
 source $HOME/.screenrc
 
+# ProTip: `screen -d -m -c screenrc` runs stax inside a screen instance that
+# autodetaches to get out of your way :D
+
 sessionname stax
 
 split -v
