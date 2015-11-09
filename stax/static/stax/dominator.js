@@ -128,16 +128,15 @@ function createStack( target ) {
 }
 
 function newNodeDragStart( evt ) {
+    // Use 'copy' to get a '+' added to the mouse cursor while hovering over a
+    // target.
     evt.originalEvent.dataTransfer.effectAllowed = "copy";
     evt.originalEvent.dataTransfer.setData( "text/plain", "push-node" );
 }
 
 function nodeDragOver( evt ) {
-    if( evt.originalEvent.dataTransfer.types.contains( "text/plain" ) ) {
-        if( evt.originalEvent.dataTransfer.getData( "text/plain" ) == "push-node" ) {
-            evt.preventDefault(); // Mark this as a drop target
-        }
-    }
+    evt.originalEvent.dataTransfer.dropEffect = "copy";
+    evt.originalEvent.preventDefault(); // Mark this as a drop target
 }
 
 function commitNewNode( parentId, getText, layer ) {
@@ -202,12 +201,10 @@ function doPushNode( elem ) {
 }
 
 function nodeDrop( evt ) {
-    if( evt.originalEvent.dataTransfer.types.contains( "text/plain" ) ) {
-        if( evt.originalEvent.dataTransfer.getData( "text/plain" ) == "push-node" ) {
-            evt.originalEvent.preventDefault(); // Mark this as a drop target
+    if( evt.originalEvent.dataTransfer.getData( "text/plain" ) == "push-node" ) {
+        evt.originalEvent.preventDefault(); // Mark this as a drop target
 
-            doPushNode( $(evt.target) );
-        }
+        doPushNode( $(evt.target) );
     }
 }
 
@@ -268,7 +265,6 @@ function registerCallbacks( rootNode ) {
 
     $(rootNode).find( ".node-maker" ).on( "dragstart", newNodeDragStart );
 
-    $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "dragenter", nodeDragOver );
     $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "dragover", nodeDragOver );
     $(rootNode).find( ".stack-leaf, .stack-node, .stack-base" ).on( "drop", nodeDrop );
 
