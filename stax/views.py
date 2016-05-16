@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.template import RequestContext
 from stax.models import StackNode, Dependency
 
