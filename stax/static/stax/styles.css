@@ -8,6 +8,8 @@
 .node-maker li, .stack-node, .stack-base, .stack-leaf {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+    margin-left: -10px;
+    margin-right: -10px;
 }
 
 .node-maker li {
@@ -17,6 +19,8 @@
 .stack-layer {
     display: inline-block;
     white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .node-maker li, .stack-node, .stack-leaf {
