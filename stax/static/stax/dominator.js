@@ -10,15 +10,15 @@ function blurOnEnter( elem ) {
     };
 }
 
-function make_widget( name, ctx, elem, attrs, cb ) {
-    var ret = document.createElement( elem );
+function make_widget( widget_name, ctx, container_elem, attrs, cb ) {
+    var ret = document.createElement( container_elem );
     for( var attr in attrs ) {
         if( attrs.hasOwnProperty( attr ) ) {
             ret.setAttribute( attr, attrs[attr] );
         }
     }
 
-    et.serverRender( name, ctx, ret, cb );
+    et.serverRender( widget_name, ctx, ret, cb );
 }
 
 function doCommitNewStack( rejectThisName, createStackButton ) {
@@ -175,9 +175,13 @@ function doPushNode( elem ) {
     var stackid = controls.attr( "stacknodeid" );
 
     var fn = function( newlayer ) {
+        // Add a space to make sure inline-block elements get the
+        // layout-altering whitespace between them that we we expect :(
+        leaf.before( " " );
+
         // Insert the new layer just before the last child element (ie leaf)
-        // container.insertBefore( newlayer, leaf );
-        $(newlayer).insertBefore( leaf );
+        leaf.before( newlayer );
+        // $(newlayer).insertBefore( leaf );
         var inp = $(newlayer).find( 'input' );
 
         // If the parent was a leaf, it isn't anymore...

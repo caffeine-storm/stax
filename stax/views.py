@@ -45,10 +45,10 @@ def render_stack( req, stk ):
             'rendered' : '<div class="stack-layer">' + render_to_string( 'stax/node.html', { 'stack' : stk } ) + '</div>'
         }
     else:
-        payload = '<div class="stack-layer">'
+        payload = '<div class="stack-layer">\n'
         payload += "\n".join( [ render_stack( req, s )['rendered'] for s in stk["children"] ] )
         payload += "\n" + render_to_string( 'stax/node.html', { 'stack' : stk } )
-        payload += '</div>'
+        payload += '</div>\n'
 
     return {
         'id' : stk["id"],
