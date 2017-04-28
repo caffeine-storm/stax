@@ -1,3 +1,7 @@
+body {
+    background-color: papayawhip;
+}
+
 .stack-list {
     list-style-type: none;
     font-size: 8pt;
@@ -25,14 +29,15 @@
 
 .node-maker li, .stack-node, .stack-leaf {
     padding: 5px;
-    border: solid 2px black;
+    border: outset 2px #0080B0;
     background-color: #00b6fe;
-    border-bottom: hidden;
+    margin-bottom: -2px;
 }
 
 .stack-base {
-    background-color: #00B800;
+    background-color: #00FE5F;
     padding: 7px;
+    border: outset 2px #B99A69;
 }
 
 .stack-node-input {
