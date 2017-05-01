@@ -98,3 +98,7 @@ body {
     visibility: visible;
 }
 
+.edit-box {
+	margin-bottom: -4px;
+}
+
