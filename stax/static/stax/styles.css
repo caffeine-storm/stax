@@ -42,6 +42,7 @@ body {
 
 .stack-node-input {
     font-size: 8pt;
+	margin-bottom: -4px;
 }
 
 .stack-leaf {
@@ -96,9 +97,5 @@ body {
 
 .stack-base:hover .stack-controls, .stack-leaf:hover .leaf-controls {
     visibility: visible;
-}
-
-.edit-box {
-	margin-bottom: -4px;
 }
 
