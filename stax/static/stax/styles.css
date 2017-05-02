@@ -42,7 +42,7 @@ body {
 
 .stack-node-input {
     font-size: 8pt;
-	margin-bottom: -4px;
+    margin-bottom: -4px;
 }
 
 .stack-leaf {
@@ -68,6 +68,10 @@ body {
     top: 0px;
     left: 0px;
     z-index: 42;
+    padding-top: 2px;
+    padding-left: 2px;
+    padding-bottom: 4px;
+    padding-right: 12px;
 }
 
 #stack-display {
