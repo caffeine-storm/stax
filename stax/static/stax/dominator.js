@@ -226,24 +226,29 @@ function getNodeID( nd ) {
     return ctrls.attr( 'stacknodeid' );
 }
 
-function editNodeName( nd ) {
-    var oldValue = nd.innerHTML;
-    et.serverRender( "editnameinput.html", {'textval':nd.textContent}, nd, function( x ) {
-        $(nd).off( 'click' );
-        var inp = $(nd).find( 'input' ).get(0);
+function editNodeName( span ) {
+    var $stackNode = $(span).parent();
+    var oldWidth = $stackNode.css( 'width' );
+    var oldTextWidth = $(span).css( 'width' );
+    var oldValue = span.innerHTML;
+    et.serverRender( "editnameinput.html", {'textval':span.textContent}, span, function( x ) {
+        $(span).off( 'click' );
+        $stackNode.css( 'width', oldWidth );
+        var inp = $(span).find( 'input' ).get(0);
+        $(inp).css( 'width', oldTextWidth );
         inp.focus();
         var fn = function(evt) {
             if( inp.value == oldValue ) {
                 // Avoid the call back to the server if the name didn't change
-                $(nd).html( oldValue );
-                $(nd).click( function() {
+                $(span).html( oldValue );
+                $(span).click( function() {
                     editNodeName( this );
                 });
                 return;
             }
-            et.phoneHome( 'rename', {'stackid': getNodeID( nd ), 'data':inp.value}, function(req) {
-                nd.innerHTML = req.responseText;
-                $(nd).click(function () {
+            et.phoneHome( 'rename', {'stackid': getNodeID( span ), 'data':inp.value}, function(req) {
+                span.innerHTML = req.responseText;
+                $(span).click(function () {
                     editNodeName( this );
                 });
             });
