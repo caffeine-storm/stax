@@ -248,6 +248,7 @@ function editNodeName( span ) {
             }
             et.phoneHome( 'rename', {'stackid': getNodeID( span ), 'data':inp.value}, function(req) {
                 span.innerHTML = req.responseText;
+                $stackNode.css( 'width', '');
                 $(span).click(function () {
                     editNodeName( this );
                 });
