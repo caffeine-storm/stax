@@ -9,14 +9,14 @@ body {
     display: inline-block;
 }
 
-.node-maker li, .stack-node, .stack-base, .stack-leaf {
+.node-maker, .stack-node, .stack-base, .stack-leaf {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     margin-left: -10px;
     margin-right: -10px;
 }
 
-.node-maker li {
+.node-maker {
     cursor: move;
 }
 
@@ -27,7 +27,7 @@ body {
     padding-right: 10px;
 }
 
-.node-maker li, .stack-node, .stack-leaf {
+.node-maker, .stack-node, .stack-leaf {
     padding: 5px;
     border: outset 2px #0080B0;
     background-color: #00b6fe;
