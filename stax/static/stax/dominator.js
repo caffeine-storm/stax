@@ -230,7 +230,7 @@ function editNodeName( span ) {
     var $stackNode = $(span).parent();
     var oldWidth = $stackNode.css( 'width' );
     var oldTextWidth = $(span).css( 'width' );
-    var oldValue = span.innerHTML;
+    var oldValue = $(span).text();
     et.serverRender( "editnameinput.html", {'textval':span.textContent}, span, function( x ) {
         $(span).off( 'click' );
         $stackNode.css( 'width', oldWidth );
@@ -240,14 +240,14 @@ function editNodeName( span ) {
         var fn = function(evt) {
             if( inp.value == oldValue ) {
                 // Avoid the call back to the server if the name didn't change
-                $(span).html( oldValue );
+                $(span).text( oldValue );
                 $(span).click( function() {
                     editNodeName( this );
                 });
                 return;
             }
             et.phoneHome( 'rename', {'stackid': getNodeID( span ), 'data':inp.value}, function(req) {
-                span.innerHTML = req.responseText;
+                $(span).text(req.responseText);
                 $stackNode.css( 'width', '');
                 $(span).click(function () {
                     editNodeName( this );
